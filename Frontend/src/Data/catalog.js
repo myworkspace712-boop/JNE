@@ -1,0 +1,20 @@
+export const catalog = [
+  { name: 'Business Cards', cat: 'Stationery' },
+  { name: 'Letter Head', cat: 'Stationery' },
+  { name: 'Envelopes', cat: 'Stationery' },
+  { name: 'Brochures', cat: 'Marketing' },
+  { name: 'Catalogues', cat: 'Marketing' },
+  { name: 'Flyers', cat: 'Marketing' },
+  { name: 'Calendar Diary', cat: 'Gifting' },
+  { name: 'Folders', cat: 'Stationery' },
+  { name: 'ID Card', cat: 'Corporate ID' },
+  { name: 'Corporate Invitation', cat: 'Marketing' },
+  { name: 'Annual Reports', cat: 'Corporate ID' },
+  { name: 'Paper Bag', cat: 'Packaging' },
+  { name: 'Packing Box', cat: 'Packaging' },
+  { name: 'Flex Banner Vinyl', cat: 'Signage' },
+  { name: 'Standee', cat: 'Signage' },
+  { name: 'Bar Code Sticker Roll', cat: 'Packaging' },
+  { name: 'Trophies', cat: 'Gifting' },
+  { name: 'Corporate Gift Articles', cat: 'Gifting' }
+];
