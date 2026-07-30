@@ -17,6 +17,8 @@ import cookieParser from 'cookie-parser';
 import connectDB from './Config/db.js';
 import quoteRoutes from './Routes/quoteRoutes.js';
 import authRoutes from './Routes/authRoutes.js';
+import MongoStore from 'connect-mongo'; // 1. Import MongoStore
+
 
 // Connect to MongoDB and then start the server
 await connectDB();
@@ -26,7 +28,8 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173',
+    ' http://192.168.1.11:5173', 'https://jne-seven.vercel.app'],
   credentials: true
 }));
 app.use(express.json()); // Parses incoming JSON from the frontend
@@ -34,10 +37,16 @@ app.use(cookieParser());
 
 // Session Configuration using express-session package
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'fallback_secret_key',
   resave: false,
   saveUninitialized: false,
-  cookie: { 
+  // 2. Add this store option to save sessions in MongoDB!
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI, // Uses your existing MongoDB Atlas connection
+    collectionName: 'sessions',      // Creates a 'sessions' collection in your DB
+    ttl: 14 * 24 * 60 * 60,          // Automatically deletes sessions after 14 days
+  }),
+  cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 // 1 day
@@ -49,8 +58,11 @@ app.use('/api/quotes', quoteRoutes);
 app.use('/api/auth', authRoutes);
 
 // Base route for testing
-app.get('/api', (req, res) => {
-  res.send('JN Enterprise API is running...');
+app.get('/', (_req, res) => {
+  res.send('JNE API is live and running...');
+});
+app.get('/api', (_req, res) => {
+  res.send('JNE API is running...');
 });
 
 // Full product matrix specified for JN Enterprise
@@ -76,7 +88,7 @@ const products = [
 ];
 
 // Product Endpoint
-app.get('/api/products', (req, res) => {
+app.get('/api/products', (_req, res) => {
   res.json(products);
 });
 
