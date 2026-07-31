@@ -97,5 +97,9 @@ app.get('/api/products', (_req, res) => {
 // ... 
 // });
 
-// Finally start the server explicitly after db connect (already awaited above, but we'll start listening here)
-app.listen(PORT, () => console.log(`JN Enterprise Backend engine active on port ${PORT}`));
+// const PORT = process.env.PORT || 10000; // Render defaults to 10000 if PORT isn't set
+
+// ADD '0.0.0.0' AS THE SECOND ARGUMENT HERE:
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server is running on port ${PORT}`);
+});

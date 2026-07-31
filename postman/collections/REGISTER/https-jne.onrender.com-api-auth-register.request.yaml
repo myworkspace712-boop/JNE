@@ -1,0 +1,19 @@
+$kind: http-request
+name: https://jne.onrender.com/api/auth/register
+description: ""
+url: https://jne.onrender.com/api/auth/register
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: "{ \r
+
+    \"name\": \"Yatharth\", \r
+
+    \"email\": \"yatharthjoshi127@gmail.com\", \r
+
+    \"password\": \"pass$4321\"\r
+
+    }"
+order: 1785427562635

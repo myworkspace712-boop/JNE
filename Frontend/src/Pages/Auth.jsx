@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ name: 'Yatharth', email: 'my.workspace.712@gmail.com', password: 'pass$4321' });
   const [status, setStatus] = useState({ type: '', message: '' });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -22,8 +22,9 @@ export default function Auth() {
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
 
     // In production, you might want to use the absolute URL or Vite proxy
-    const apiUrl = `http://192.168.1.11${endpoint}`;
-    // const apiUrl = `http://localhost:5000${endpoint}`;
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const apiUrl = `${baseUrl}${endpoint}`;
+    // const apiUrl = `http://192.168.1.11:5000${endpoint}`;
 
     try {
       const response = await fetch(apiUrl, {

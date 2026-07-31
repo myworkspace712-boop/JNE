@@ -7,13 +7,26 @@ import crypto from 'crypto';
 
 // Transporter configuration
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.ethereal.email',
-    port: process.env.SMTP_PORT || 587,
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Required for port 465
     auth: {
-        user: process.env.SMTP_USER || 'leola.goyette@ethereal.email',
-        pass: process.env.SMTP_PASS || 'dE1N5fR6h9dK6FqGqz',
-    }
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    },
+
+    family: 4,
+
+    connectionTimeout: 20000, // 20 seconds
+    greetingTimeout: 20000,   // 20 seconds
+    socketTimeout: 20000,     // 20 seconds
+
+    tls: {
+        rejectUnauthorized: false
+    },
 });
+
 
 // Helper: Send Verification Email
 const sendVerificationMail = async (email, token) => {
