@@ -55,19 +55,22 @@ export const registerUser = async (req, res) => {
             return res.status(400).json({ error: 'Please add all required fields.' });
         }
 
+        console.log('1. Checking for existing user...');
         const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({ error: 'An account with this email already exists.' });
         }
 
+        console.log('2. Hashing password...');
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const verificationToken = crypto.randomBytes(32).toString('hex');
         const tokenExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours from now
 
-        // 4. Determine role (Security fallback: only allow 'admin' or 'user')
+        // Determine role (Security fallback: only allow 'admin' or 'user')
         const assignedRole = role === 'admin' ? 'admin' : 'user';
 
+        console.log('3. Saving user to MongoDB Atlas with role:', assignedRole);
         const user = await User.create({
             name,
             email,
@@ -78,34 +81,39 @@ export const registerUser = async (req, res) => {
             verificationTokenExpires: tokenExpires
         });
 
+        console.log('4. User successfully created in DB:', user._id);
+        console.log('5. Attempting to send Nodemailer verification email...');
+
         try {
             await sendVerificationMail(user.email, verificationToken);
+            res.status(201).json({
+                success: true,
+                role: assignedRole,
+                message: 'Registration successful! Please check your email to verify your account.',
+                user: user
+            });
         } catch (emailError) {
-            console.error("Failed to send verification email:", emailError);
-            if (String(emailError).includes('535-5.7.8') || (emailError.response && emailError.response.includes('535-5.7.8'))) {
-                console.error("SMTP Authentication Error (535-5.7.8): Please check your SMTP_USER and SMTP app password.");
-            } else if (emailError.code === 'ETIMEDOUT' || emailError.code === 'ESOCKETTIMEDOUT' || String(emailError).includes('timeout')) {
-                console.error("SMTP Network Timeout: Connection to Gmail failed.");
-            }
-            // If email fails, remove user so they can attempt registration again
-            await User.findByIdAndDelete(user._id);
-            return res.status(500).json({ error: 'Email service error. Please try registering again later.' });
+            console.error('⚠️ User created in DB, but Email failed:', emailError.message);
+            return res.status(201).json({
+                success: true,
+                message: 'User registered successfully! (Verification email delayed).',
+                role: assignedRole,
+                user: user
+            });
         }
 
-        res.status(201).json({
-            success: true,
-            role: assignedRole,
-            message: 'Registration successful! Please check your email to verify your account.'
-        });
-
     } catch (error) {
-        console.error('❌ REGISTRATION CRASH [FULL ERROR]:', error);
+        console.error('❌ DATABASE / SERVER CRASH:', error.stack || error);
         
         if (error.code === 11000) {
             return res.status(400).json({ success: false, error: 'An account with this email already exists.' });
         }
 
-        res.status(500).json({ error: 'Server error during registration.' });
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ success: false, error: error.message });
+        }
+
+        res.status(500).json({ success: false, error: error.message || 'Server error during registration.' });
     }
 };
 
