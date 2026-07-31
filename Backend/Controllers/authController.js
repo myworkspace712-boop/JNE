@@ -7,7 +7,6 @@ import crypto from 'crypto';
 
 // Transporter configuration
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
     host: 'smtp.gmail.com',
     port: 465,
     secure: true, // Required for port 465
@@ -50,7 +49,7 @@ const sendVerificationMail = async (email, token) => {
 // =======================================================
 export const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
 
         if (!name || !email || !password) {
             return res.status(400).json({ error: 'Please add all required fields.' });
@@ -66,11 +65,14 @@ export const registerUser = async (req, res) => {
         const verificationToken = crypto.randomBytes(32).toString('hex');
         const tokenExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours from now
 
+        // 4. Determine role (Security fallback: only allow 'admin' or 'user')
+        const assignedRole = role === 'admin' ? 'admin' : 'user';
+
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
-            role: 'client', // Default role set explicitly
+            role: assignedRole,
             isVerified: false,
             verificationToken,
             verificationTokenExpires: tokenExpires
@@ -80,6 +82,11 @@ export const registerUser = async (req, res) => {
             await sendVerificationMail(user.email, verificationToken);
         } catch (emailError) {
             console.error("Failed to send verification email:", emailError);
+            if (String(emailError).includes('535-5.7.8') || (emailError.response && emailError.response.includes('535-5.7.8'))) {
+                console.error("SMTP Authentication Error (535-5.7.8): Please check your SMTP_USER and SMTP app password.");
+            } else if (emailError.code === 'ETIMEDOUT' || emailError.code === 'ESOCKETTIMEDOUT' || String(emailError).includes('timeout')) {
+                console.error("SMTP Network Timeout: Connection to Gmail failed.");
+            }
             // If email fails, remove user so they can attempt registration again
             await User.findByIdAndDelete(user._id);
             return res.status(500).json({ error: 'Email service error. Please try registering again later.' });
@@ -87,11 +94,17 @@ export const registerUser = async (req, res) => {
 
         res.status(201).json({
             success: true,
+            role: assignedRole,
             message: 'Registration successful! Please check your email to verify your account.'
         });
 
     } catch (error) {
-        console.error('Registration error:', error);
+        console.error('❌ REGISTRATION CRASH [FULL ERROR]:', error);
+        
+        if (error.code === 11000) {
+            return res.status(400).json({ success: false, error: 'An account with this email already exists.' });
+        }
+
         res.status(500).json({ error: 'Server error during registration.' });
     }
 };
@@ -221,6 +234,9 @@ export const loginAdmin = async (req, res) => {
 
     } catch (error) {
         console.error('Admin login error:', error);
-        res.status(500).json({ error: 'Server error during admin login.' });
+        return res.status(500).json({
+            success: false,
+            error: 'Server error during registration.'
+        });
     }
 };

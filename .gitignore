@@ -1,0 +1,4 @@
+# Ignore Postman cache and workspace folders
+.postman
+.postman/
+postman
