@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // import { Link } from 'react-router-dom';
 
 
@@ -27,22 +28,12 @@ export default function Auth() {
     // const apiUrl = `http://192.168.1.11:5000${endpoint}`;
 
     try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(isLogin
-          ? { email: formData.email, password: formData.password }
-          : { name: formData.name, email: formData.email, password: formData.password }
-        )
-      });
+      const payload = isLogin
+        ? { email: formData.email, password: formData.password }
+        : { name: formData.name, email: formData.email, password: formData.password };
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong');
-      }
+      const response = await axios.post(apiUrl, payload);
+      const data = response.data;
 
       if (!isLogin) {
         // Registration successful
@@ -51,12 +42,24 @@ export default function Auth() {
       } else {
         // Login successful
         setStatus({ type: 'success', message: 'Logged in successfully!' });
-        // Redirect to home or dashboard after short delay
-        setTimeout(() => navigate('/'), 1000);
+
+        // Save to localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        // Redirect based on role
+        setTimeout(() => {
+          if (data.user.role === 'admin') {
+            navigate('/admin-dashboard');
+          } else {
+            navigate('/');
+          }
+        }, 1000);
       }
 
     } catch (err) {
-      setStatus({ type: 'error', message: err.message });
+      const errorMsg = err.response?.data?.error || err.message || 'Something went wrong';
+      setStatus({ type: 'error', message: errorMsg });
     } finally {
       setLoading(false);
     }

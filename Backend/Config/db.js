@@ -18,7 +18,20 @@ const connectDB = async () => {
             }
         }
 
-        const conn = await mongoose.connect(uri);
+        // Add explicit connection event listeners
+        mongoose.connection.on('connected', () => {
+            console.log('✅ MongoDB connection established.');
+        });
+        
+        mongoose.connection.on('error', (err) => {
+            console.error(`❌ MongoDB Connection Error Event: ${err.message}`);
+        });
+
+        const conn = await mongoose.connect(uri, {
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+            family: 4
+        });
         console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         console.error(`❌ MongoDB Connection Error: ${error.message}`);

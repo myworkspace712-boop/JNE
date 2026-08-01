@@ -7,6 +7,8 @@ import About from './Pages/About.jsx';
 import Auth from './Pages/Auth.jsx';
 import VerifyEmail from './Pages/VerifyEmail.jsx';
 import QuoteModal from './Components/QuoteModal.jsx';
+import AdminRoute from './Components/AdminRoute.jsx';
+import AdminDashboard from './Pages/AdminDashboard.jsx';
 
 
 export default function App() {
@@ -30,6 +32,14 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/verify/:token" element={<VerifyEmail />} />
+          <Route 
+            path="/admin-dashboard" 
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            } 
+          />
         </Routes>
       </Layout>
 
