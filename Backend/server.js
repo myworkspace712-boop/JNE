@@ -10,6 +10,22 @@ const __dirname = path.dirname(__filename);
 // Load environment variables from the Backend folder's .env file
 dotenv.config({ path: path.join(__dirname, '.env') });
 
+// =======================================================
+// CRITICAL ENVIRONMENT VARIABLE VALIDATION
+// =======================================================
+const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET', 'SESSION_SECRET'];
+const missingEnvVars = requiredEnvVars.filter((varName) => !process.env[varName]);
+
+if (missingEnvVars.length > 0) {
+  console.error('\n======================================================');
+  console.error('❌ [MISSING ENV VAR WARNING] Critical environment variables missing:');
+  missingEnvVars.forEach((v) => console.error(`   -> ${v}`));
+  console.error('⚠️ Please add them to your .env file or Render Environment tab!');
+  console.error('======================================================\n');
+} else {
+  console.log('✅ [Env Check] All critical environment variables present.');
+}
+
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
@@ -17,21 +33,51 @@ import cookieParser from 'cookie-parser';
 import connectDB from './Config/db.js';
 import quoteRoutes from './Routes/quoteRoutes.js';
 import authRoutes from './Routes/authRoutes.js';
+import adminRoutes from './Routes/adminRoutes.js';
 import MongoStore from 'connect-mongo'; // 1. Import MongoStore
+import mongoose from 'mongoose';
+import { getHeroSlides } from './Controllers/heroController.js';
 
 
-// Connect to MongoDB and then start the server
-await connectDB();
+// Function to initialize server and establish resilient database connection
+const startServer = async () => {
+  try {
+    // 1. Kick off database connection with automatic 5s retry loop
+    connectDB();
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+    const app = express();
+    const PORT = process.env.PORT || 5000;
 
-// Middleware
+
+// Allowed Origins for CORS
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000',
+  'https://jne-seven.vercel.app',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+// CORS configuration with preflight handling
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173',
-    ' http://192.168.1.11:5173', 'https://jne-seven.vercel.app'],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
+
+// Handle preflight OPTIONS requests cleanly across all routes (Express 5 pathToRegexp syntax)
+app.options(/(.*)/, cors());
+
+// MUST be before routes to parse body
 app.use(express.json()); // Parses incoming JSON from the frontend
 app.use(cookieParser());
 
@@ -53,9 +99,40 @@ app.use(session({
   }
 }));
 
+// Serve static uploads directory for uploaded hero carousel images
+    app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Breadcrumb Request Logger Middleware
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString();
+  console.log(`📡 [${timestamp}] Incoming Request: ${req.method} ${req.originalUrl || req.url} | IP: ${req.ip || req.headers['x-forwarded-for'] || 'unknown'}`);
+  
+  // Track response completion & timing
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`🏁 [${new Date().toISOString()}] Completed: ${req.method} ${req.originalUrl || req.url} -> Status ${res.statusCode} (${duration}ms)`);
+  });
+
+  next();
+});
+
 // API Routes
+app.get('/api/hero-slides', getHeroSlides);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+
+// Health check route for Render & monitoring (returns DB connection state)
+app.get('/api/health', (_req, res) => {
+  const dbStateMap = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  res.status(200).json({ 
+    status: 'OK', 
+    dbState: dbStateMap[mongoose.connection.readyState] || 'unknown',
+    readyState: mongoose.connection.readyState,
+    timestamp: new Date().toISOString()
+  });
+});
 
 // Base route for testing
 app.get('/', (_req, res) => {
@@ -92,14 +169,41 @@ app.get('/api/products', (_req, res) => {
   res.json(products);
 });
 
-// Quote Request Endpoint utilizing sessions (Mock/Dummy)
-// app.post('/api/quote', (req, res) => {
-// ... 
-// });
+// Global Express Error-Handling Middleware (catches all errors passed via next(err))
+    app.use((err, req, res, _next) => {
+      console.error(`💥 [Express Global Error Handler] Error on ${req.method} ${req.originalUrl || req.url}:`);
+      console.error(err.stack || err);
 
-// const PORT = process.env.PORT || 10000; // Render defaults to 10000 if PORT isn't set
+      const statusCode = err.statusCode || (res.statusCode >= 400 ? res.statusCode : 500);
+      return res.status(statusCode).json({
+        success: false,
+        error: err.message || 'Internal Server Error'
+      });
+    });
 
-// ADD '0.0.0.0' AS THE SECOND ARGUMENT HERE:
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Server is running on port ${PORT}`);
+    // ADD '0.0.0.0' AS THE SECOND ARGUMENT HERE:
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 [Server Status] Server is up and listening on port ${PORT}`);
+      console.log(`🌐 [Server Status] Ready to accept requests from frontend`);
+    });
+  } catch (error) {
+    console.error('❌ [Fatal Startup Error] Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+// Catch unhandled promise rejections (e.g., failed database saves)
+process.on('unhandledRejection', (err) => {
+  console.error('❌ UNHANDLED REJECTION! Keeping server alive...');
+  console.error(err?.name || 'Error', err?.message || err);
 });
+
+// Catch synchronous exceptions
+process.on('uncaughtException', (err) => {
+  console.error('❌ UNCAUGHT EXCEPTION! Keeping server alive...');
+  console.error(err?.name || 'Error', err?.message || err);
+});
+
+// Execute startup sequence
+startServer();
+

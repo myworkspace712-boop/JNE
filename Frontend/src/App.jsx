@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './Components/Layout.jsx';
 import Home from './Pages/Home.jsx';
 import Services from './Pages/Services.jsx';
+import Products from './Pages/Products.jsx';
 import About from './Pages/About.jsx';
 import Auth from './Pages/Auth.jsx';
 import VerifyEmail from './Pages/VerifyEmail.jsx';
@@ -29,9 +30,12 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home setSelectedProduct={setSelectedProduct} />} />
           <Route path="/services" element={<Services setSelectedProduct={setSelectedProduct} />} />
+          <Route path="/products" element={<Products setSelectedProduct={setSelectedProduct} />} />
           <Route path="/about" element={<About />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/verify/:token" element={<VerifyEmail />} />
+          <Route path="/login" element={<Auth />} />
+          <Route path="/register" element={<Auth />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route 
             path="/admin-dashboard" 
             element={

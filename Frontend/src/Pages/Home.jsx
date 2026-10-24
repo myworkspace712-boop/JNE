@@ -1,22 +1,16 @@
 import React from 'react';
-import Hero from '../Components/Hero.jsx';
+import HeroCarousel from '../Components/HeroCarousel.jsx';
 import Solutions from '../Components/Solutions.jsx';
 
-// You can import other components here as you build them
-// import Services from '../Components/Services';
-// import Products from '../Components/Products';
-
-export default function Home() {
+export default function Home({ setSelectedProduct }) {
     return (
-        <>
-            <Hero />
-            <Solutions />
+        <div className="bg-stone-50 dark:bg-stone-950 transition-colors">
+            {/* Dynamic Public Hero Section with Image Carousel */}
+            <HeroCarousel />
 
-            {/* 
-        Add your other components here just like your old project:
-        <Services />
-        <Products />
-      */}
-        </>
+            {/* Value Propositions & Solutions */}
+            <Solutions setSelectedProduct={setSelectedProduct} />
+        </div>
     );
 }
+

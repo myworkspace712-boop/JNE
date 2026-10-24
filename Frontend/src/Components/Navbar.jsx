@@ -5,21 +5,25 @@ import { MdLightMode, MdDarkMode, MdClose } from 'react-icons/md';
 import { CiMenuBurger } from 'react-icons/ci';
 import { useTheme } from './ThemeContext.jsx';
 
+
 export default function Navbar() {
   const location = useLocation();
   const { dark, setDark } = useTheme();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Close sidebar when the route changes
+  // Close sidebar and check auth when the route changes
   useEffect(() => {
     setDrawerOpen(false);
+    setIsLoggedIn(!!localStorage.getItem('token'));
   }, [location.pathname]);
 
   const navLinks = [
     { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products' },
     { name: 'Services', path: '/services' },
     { name: 'About Us', path: '/about' },
-    { name: 'Login / Sign Up', path: '/auth' }
+    ...(!isLoggedIn ? [{ name: 'Login / Sign Up', path: '/auth' }] : [])
   ];
 
   return (
@@ -61,6 +65,13 @@ export default function Navbar() {
 
           {/* 4. Action Buttons (Right) */}
           <div className="relative flex items-center space-x-4 z-20 shrink-0">
+            {/* Profile Picture (All screens conditionally) */}
+            {isLoggedIn && (
+              <Link to="/auth" className="block w-11 h-11 rounded-full overflow-hidden border border-yellow-200 dark:border-stone-300 shadow-sm active:scale-90 transition-transform">
+                <img src="https://i.pravatar.cc/150?img=11" alt="Profile" className="w-full h-full object-cover" />
+              </Link>
+            )}
+
             {/* Theme Toggle Button */}
             <button
               type="button"
@@ -115,6 +126,15 @@ export default function Navbar() {
 
         {/* Sidebar Links */}
         <nav className="flex flex-col p-6 space-y-6">
+          {/* Profile Picture in Sidebar (Top) */}
+          {isLoggedIn && (
+            <Link to="/auth" className="flex items-center space-x-4 pb-4 border-b border-slate-100 dark:border-stone-800">
+               <div className="w-12 h-12 rounded-full overflow-hidden border border-yellow-200 dark:border-stone-300 shadow-sm">
+                  <img src="https://i.pravatar.cc/150?img=11" alt="Profile" className="w-full h-full object-cover" />
+               </div>
+            </Link>
+          )}
+
           {navLinks.map((page) => {
             const isActive = location.pathname === page.path;
             return (

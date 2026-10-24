@@ -1,36 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import axios from 'axios';
 
 
 export default function VerifyEmail() {
-  const { token } = useParams();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
   const [status, setStatus] = useState('verifying');
   const [message, setMessage] = useState('Verifying your email, please wait...');
 
-  const calledOnce = React.useRef(false);
+  const calledOnce = useRef(false);
 
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/auth/verify/${token}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setStatus('success');
-          setMessage(data.message || 'Email verified successfully!');
-        } else {
-          setStatus('error');
-          setMessage(data.error || 'Verification failed. The link might be expired.');
-        }
+        const baseUrl = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const response = await axios.post(`${baseUrl}/api/auth/verify`, { token });
+        setStatus('success');
+        setMessage(response.data.message || 'Email verified successfully!');
       } catch (err) {
         setStatus('error');
-        setMessage('Network error. Could not verify email at this time.');
+        setMessage(
+          err.response?.data?.error || 'Verification failed. The link might be expired or invalid.'
+        );
       }
     };
 
     if (token && !calledOnce.current) {
       calledOnce.current = true;
       verifyToken();
+    } else if (!token) {
+      setStatus('error');
+      setMessage('No verification token provided in the URL.');
     }
   }, [token]);
 

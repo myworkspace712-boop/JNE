@@ -19,7 +19,7 @@ export const submitQuote = async (req, res) => {
             quantity,
         });
 
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             message: `Thank you, ${name}. Your quote for ${quantity}x ${product} has been successfully logged!`,
             data: newQuote
@@ -27,7 +27,7 @@ export const submitQuote = async (req, res) => {
 
     } catch (error) {
         console.error('Quote submission error:', error);
-        res.status(500).json({ error: 'Server error while processing your quote.' });
+        return res.status(500).json({ error: 'Server error while processing your quote.' });
     }
 };
 
@@ -36,10 +36,10 @@ export const submitQuote = async (req, res) => {
 export const getAllQuotes = async (req, res) => {
     try {
         const quotes = await Quote.find().sort({ createdAt: -1 });
-        res.status(200).json(quotes);
+        return res.status(200).json(quotes);
     } catch (error) {
         console.error('Error fetching quotes:', error);
-        res.status(500).json({ error: 'Server error while fetching quotes.' });
+        return res.status(500).json({ error: 'Server error while fetching quotes.' });
     }
 };
 
@@ -60,13 +60,13 @@ export const updateQuoteStatus = async (req, res) => {
             return res.status(404).json({ error: 'Quote not found.' });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: 'Quote status updated successfully.',
             data: updatedQuote
         });
     } catch (error) {
         console.error('Error updating quote status:', error);
-        res.status(500).json({ error: 'Server error while updating quote status.' });
+        return res.status(500).json({ error: 'Server error while updating quote status.' });
     }
 };

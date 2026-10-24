@@ -30,28 +30,38 @@ const sendVerificationMail = async (email, token, name, role) => {
         family: 4 // Forces IPv4, bypassing Render's IPv6 networking bugs
     });
 
-    const verificationUrl = `https://jne.onrender.com/api/auth/verify/${token}`;
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const verificationUrl = `${clientUrl}/verify-email?token=${token}`;
     const roleDisplay = role === 'admin' ? 'Administrator' : 'User';
     
-    await transporter.sendMail({
-        from: '"JN Enterprise" <noreply@jnenterprise.com>',
-        to: email,
-        subject: 'Verify Your Email - JN Enterprise',
-        html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-                <h2 style="color: #1f2937;">Welcome to JN Enterprise, ${name}!</h2>
-                <p style="color: #4b5563; font-size: 16px;">Thank you for registering as a <strong>${roleDisplay}</strong>.</p>
-                <p style="color: #4b5563; font-size: 16px;">Please verify your email address by clicking the link below:</p>
-                <div style="text-align: center; margin: 30px 0;">
-                    <a href="${verificationUrl}" style="background-color: #f59e0b; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Verify Email</a>
+    console.log(`📧 Attempting to send verification email to: ${email}`);
+    
+    try {
+        const info = await transporter.sendMail({
+            from: '"JN Enterprise" <noreply@jnenterprise.com>',
+            to: email,
+            subject: 'Verify Your Email - JN Enterprise',
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                    <h2 style="color: #1f2937;">Welcome to JN Enterprise, ${name}!</h2>
+                    <p style="color: #4b5563; font-size: 16px;">Thank you for registering as a <strong>${roleDisplay}</strong>.</p>
+                    <p style="color: #4b5563; font-size: 16px;">Please verify your email address by clicking the link below:</p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${verificationUrl}" style="background-color: #f59e0b; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Verify Email</a>
+                    </div>
+                    <p style="color: #6b7280; font-size: 14px;">Or copy and paste this link into your browser:</p>
+                    <p style="word-break: break-all; color: #3b82f6; font-size: 14px;">${verificationUrl}</p>
+                    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+                    <p style="color: #9ca3af; font-size: 12px; text-align: center;"><em>Note: This link expires in 24 hours.</em></p>
                 </div>
-                <p style="color: #6b7280; font-size: 14px;">Or copy and paste this link into your browser:</p>
-                <p style="word-break: break-all; color: #3b82f6; font-size: 14px;">${verificationUrl}</p>
-                <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
-                <p style="color: #9ca3af; font-size: 12px; text-align: center;"><em>Note: This link expires in 24 hours.</em></p>
-            </div>
-        `
-    });
+            `
+        });
+        console.log(`✅ Verification email successfully sent to ${email}. Message ID: ${info.messageId}`);
+    } catch (error) {
+        console.error(`❌ CRITICAL: Failed to send verification email to ${email}`);
+        console.error('SMTP ERROR DETAILS:', error);
+        throw error; // Rethrow to ensure the register controller handles it properly
+    }
 };
 
 // =======================================================
@@ -67,9 +77,10 @@ export const registerUser = async (req, res) => {
             });
         }
 
-        const { name, email, password, role } = req.body;
+        const { name, username, email, password, role } = req.body;
+        const displayName = name || username;
 
-        if (!name || !email || !password) {
+        if (!displayName || !email || !password) {
             return res.status(400).json({ error: 'Please add all required fields.' });
         }
 
@@ -83,28 +94,30 @@ export const registerUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const verificationToken = crypto.randomBytes(32).toString('hex');
-        const tokenExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours from now
+        const tokenExpires = Date.now() + 30 * 60 * 1000; // 30 mins from now
 
         // Determine role (Security fallback: only allow 'admin' or 'user')
         const assignedRole = role === 'admin' ? 'admin' : 'user';
 
         console.log('3. Saving user to MongoDB Atlas with role:', assignedRole);
         const user = await User.create({
-            name,
+            name: displayName,
             email,
             password: hashedPassword,
             role: assignedRole,
-            isVerified: false,
+            isVerified: false, // Explicitly forcing false on creation
             verificationToken,
             verificationTokenExpires: tokenExpires
         });
 
         console.log('4. User successfully created in DB:', user._id);
+        console.log('   -> Generated Token:', verificationToken);
+        console.log('   -> Stored Token in DB:', user.verificationToken);
         console.log('5. Attempting to send Nodemailer verification email...');
 
         try {
-            await sendVerificationMail(user.email, verificationToken, user.name, assignedRole);
-            res.status(201).json({
+            await sendVerificationMail(user.email, verificationToken, displayName, assignedRole);
+            return res.status(201).json({
                 success: true,
                 role: assignedRole,
                 message: 'Registration successful! Please check your email to verify your account.',
@@ -136,7 +149,7 @@ export const registerUser = async (req, res) => {
             return res.status(400).json({ success: false, error: error.message });
         }
 
-        res.status(500).json({ success: false, error: error.message || 'Server error during registration.' });
+        return res.status(500).json({ success: false, error: error.message || 'Server error during registration.' });
     }
 };
 
@@ -145,43 +158,55 @@ export const registerUser = async (req, res) => {
 // =======================================================
 export const verifyAccount = async (req, res) => {
     try {
-        const { token } = req.params;
+        const { token } = req.body; // UPDATED: Reading token from JSON body instead of URL params
 
-        const user = await User.findOne({
-            verificationToken: token,
-            verificationTokenExpires: { $gt: Date.now() } // Ensure token is not expired
-        });
+        console.log('--- VERIFICATION DEBUG ---');
+        console.log('1. Token received from BODY:', token);
+
+        const user = await User.findOne({ verificationToken: token });
 
         if (!user) {
-            return res.status(400).send(`
-                <div style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
-                    <h2 style="color: #dc2626;">Verification Failed</h2>
-                    <p>Invalid or expired verification token. Please try registering again or request a new link.</p>
-                </div>
-            `);
+            return res.status(400).json({ error: 'Invalid verification token.' });
+        }
+
+        // Check if token is expired, but ONLY if they aren't already verified
+        if (!user.isVerified && user.verificationTokenExpires < Date.now()) {
+            return res.status(400).json({ error: 'Verification token has expired. Please register again.' });
+        }
+
+        // Idempotency: If already verified, return success immediately
+        if (user.isVerified) {
+            return res.status(200).json({ message: 'Email is already verified! You can now log in.' });
+        }
+
+        console.log('2. Database query result:', user ? `User found (${user.email})` : 'Null (No user found or token expired)');
+        
+        if (!user) {
+            const checkTokenOnly = await User.findOne({ verificationToken: token });
+            if (checkTokenOnly) {
+                console.log('   -> Token exists in DB but might be expired. Expiry in DB:', checkTokenOnly.verificationTokenExpires);
+                console.log('   -> Current server time (Date.now()):', new Date(Date.now()));
+            } else {
+                console.log('   -> Token does NOT exist in DB at all.');
+            }
+        }
+        console.log('--------------------------');
+
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid or expired verification token. Please try registering again or request a new link.' });
         }
 
         user.isVerified = true;
-        user.verificationToken = undefined;
-        user.verificationTokenExpires = undefined;
+        // We DO NOT set verificationToken to undefined here. 
+        // React 18 StrictMode double-fetches the API. If we delete the token on the first fetch, 
+        // the second fetch (milliseconds later) will fail with "Invalid token".
         await user.save();
 
-        res.status(200).send(`
-            <div style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
-                <h2 style="color: #16a34a;">Email Successfully Verified!</h2>
-                <p>Your account is now active. You can close this window and log in to your account.</p>
-                <a href="https://jne-seven.vercel.app/auth" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #f59e0b; color: white; text-decoration: none; border-radius: 5px;">Go to Login</a>
-            </div>
-        `);
+        return res.status(200).json({ message: 'Email verified successfully! You can now log in.' });
 
     } catch (error) {
         console.error('Verification error:', error);
-        res.status(500).send(`
-            <div style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
-                <h2 style="color: #dc2626;">Server Error</h2>
-                <p>There was a problem verifying your account. Please try again later.</p>
-            </div>
-        `);
+        return res.status(500).json({ error: 'Server error during verification. Please try again later.' });
     }
 };
 
@@ -274,7 +299,7 @@ export const loginAdmin = async (req, res) => {
             maxAge: 1 * 24 * 60 * 60 * 1000
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: 'Admin authenticated successfully.',
             admin: { id: admin._id, name: admin.name, email: admin.email, role: admin.role }

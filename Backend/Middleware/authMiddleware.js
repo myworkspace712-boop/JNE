@@ -41,8 +41,7 @@ export const protect = async (req, res, next) => {
 // 2. Admin Authorization Guard
 export const isAdmin = (req, res, next) => {
     if (req.user && req.user.role === 'admin') {
-        next();
-    } else {
-        res.status(403).json({ error: 'Access denied. Admin privileges required.' });
+        return next();
     }
+    return res.status(403).json({ error: 'Access denied. Admin privileges required.' });
 };
