@@ -46,6 +46,31 @@ export default function Auth() {
     setShowEmailSuggestions(false);
   };
 
+  // Get current logged-in user email if available
+  const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
+  const currentUserEmail = storedUser?.email || '';
+
+  const handleClearUsers = async () => {
+    const confirmDelete = window.confirm("CRITICAL WARNING: Delete all standard users?");
+    if (!confirmDelete) return;
+
+    try {
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/users/clear`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        // Hardcode the admin email being sent to the backend for verification
+        body: JSON.stringify({ requestingEmail: 'yatharthjoshi127@gmail.com' })
+      });
+
+      const data = await response.json();
+      if (response.ok) alert(data.message);
+      else alert(data.error);
+    } catch (error) {
+      alert("Server error.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     // 1. MUST be the very first line to prevent silent page refresh
     e.preventDefault();
@@ -272,6 +297,20 @@ export default function Auth() {
             </button>
           </p>
         </div>
+
+        {/* ADMIN ONLY UI */}
+        {currentUserEmail === 'yatharthjoshi127@gmail.com' && (
+          <div className="mt-8 border-t border-gray-200 dark:border-stone-700 pt-6">
+            <button 
+              type="button" 
+              onClick={handleClearUsers}
+              className="w-full bg-red-50 text-red-600 border border-red-200 font-bold text-sm py-3 px-4 rounded-xl hover:bg-red-100 dark:bg-red-950/20 dark:border-red-900/50 dark:hover:bg-red-900/40 transition-colors flex justify-center items-center space-x-2 cursor-pointer"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              <span>Admin: Remove All Existing Users</span>
+            </button>
+          </div>
+        )}
 
       </div>
     </div>

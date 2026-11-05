@@ -10,11 +10,11 @@ export const catalog = [
   { name: 'ID Card', cat: 'Corporate ID' },
   { name: 'Corporate Invitation', cat: 'Marketing' },
   { name: 'Annual Reports', cat: 'Corporate ID' },
-  { name: 'Paper Bag', cat: 'Packaging' },
-  { name: 'Packing Box', cat: 'Packaging' },
+  { name: 'Paper Bags', cat: 'Packaging' },
+  { name: 'Box Packaging', cat: 'Packaging' },
   { name: 'Flex Banner Vinyl', cat: 'Signage' },
   { name: 'Standee', cat: 'Signage' },
   { name: 'Bar Code Sticker Roll', cat: 'Packaging' },
   { name: 'Trophies', cat: 'Gifting' },
-  { name: 'Corporate Gift Articles', cat: 'Gifting' }
+  { name: 'Gift Articles', cat: 'Gifting' }
 ];

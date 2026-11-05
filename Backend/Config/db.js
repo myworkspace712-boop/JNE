@@ -6,18 +6,18 @@ mongoose.connection.on('connected', () => {
 });
 
 mongoose.connection.on('error', (err) => {
-    console.error(`❌ [MongoDB Lifecycle] Ongoing Connection Error: ${err.message}`);
+    console.error(`❌ [ANTI-CRASH] MongoDB Runtime Error: ${err.message}`);
 });
 
 mongoose.connection.on('disconnected', () => {
-    console.warn('⚠️ [MongoDB Lifecycle] MongoDB disconnected! Attempting reconnect or checking network...');
+    console.warn('⚠️ MongoDB Disconnected! Attempting to reconnect...');
 });
 
 mongoose.connection.on('reconnected', () => {
     console.log('🔄 [MongoDB Lifecycle] MongoDB reconnected successfully.');
 });
 
-const connectDB = async (retryCount = 0) => {
+const connectDB = async () => {
     try {
         const uri = process.env.MONGO_URI;
 
@@ -46,9 +46,7 @@ const connectDB = async (retryCount = 0) => {
         console.log(`✅ [MongoDB Init] Connected to Cluster Host: ${conn.connection.host}`);
         return conn;
     } catch (error) {
-        console.error(`❌ [MongoDB Connection Error] Attempt ${retryCount + 1} failed: ${error.message}`);
-        console.warn('⚠️ Retrying MongoDB connection in 5 seconds...');
-        setTimeout(() => connectDB(retryCount + 1), 5000);
+        console.error(`❌ [MongoDB Connection Error]: ${error.message}`);
     }
 };
 

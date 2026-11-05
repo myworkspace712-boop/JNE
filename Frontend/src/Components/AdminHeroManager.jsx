@@ -133,17 +133,17 @@ export default function AdminHeroManager() {
   return (
     <div className="modern-card p-6 md:p-8 space-y-6">
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-200 dark:border-stone-700">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-200 dark:border-stone-800">
         <div>
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-extrabold text-amber-950 dark:text-orange-300">
+            <h2 className="text-xl font-extrabold text-amber-950 dark:text-[#d4a373]">
               Hero Section Carousel Manager
             </h2>
             <span
               className={`px-3 py-1 text-xs font-bold rounded-full ${
                 isMaxReached
                   ? 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300'
-                  : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300'
+                  : 'bg-stone-100 text-amber-950 dark:bg-[#c58f5e]/20 dark:text-[#d4a373] border border-amber-950/20 dark:border-[#d4a373]/30'
               }`}
             >
               {slides.length} / {MAX_HERO_IMAGES} Slides Used
@@ -171,14 +171,14 @@ export default function AdminHeroManager() {
       )}
 
       {/* Upload Form Box */}
-      <div className="bg-stone-50/70 dark:bg-stone-800/40 rounded-2xl p-5 md:p-6 border border-stone-200 dark:border-stone-700">
-        <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 mb-4 flex items-center gap-2">
-          <MdCloudUpload className="text-xl text-amber-600 dark:text-orange-400" />
+      <div className="bg-stone-50/70 dark:bg-stone-900/60 rounded-2xl p-5 md:p-6 border border-stone-200 dark:border-stone-800">
+        <h3 className="text-base font-bold text-amber-950 dark:text-[#d4a373] mb-4 flex items-center gap-2">
+          <MdCloudUpload className="text-xl text-amber-950 dark:text-[#d4a373]" />
           Upload New Hero Slide
         </h3>
 
         {isMaxReached ? (
-          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-sm flex items-center gap-3">
+          <div className="p-4 rounded-xl bg-stone-100 dark:bg-stone-900 border border-amber-950/20 dark:border-[#d4a373]/30 text-amber-950 dark:text-[#d4a373] text-sm flex items-center gap-3">
             <MdInfo className="text-xl shrink-0" />
             <p>
               <strong>Limit Reached:</strong> The carousel currently has the maximum of {MAX_HERO_IMAGES} active slides. Delete an existing slide below to upload a new one.
@@ -192,7 +192,7 @@ export default function AdminHeroManager() {
                 <label className="block text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mb-2">
                   Image File (Max 5MB) *
                 </label>
-                <div className="relative border-2 border-dashed border-stone-300 dark:border-stone-600 hover:border-amber-500 rounded-xl p-4 text-center cursor-pointer transition-colors bg-white dark:bg-stone-900">
+                <div className="relative border-2 border-dashed border-stone-300 dark:border-stone-700 hover:border-amber-950 dark:hover:border-[#d4a373] rounded-xl p-4 text-center cursor-pointer transition-colors bg-white dark:bg-black">
                   <input
                     type="file"
                     accept="image/*"
@@ -213,7 +213,7 @@ export default function AdminHeroManager() {
                     </div>
                   ) : (
                     <div className="py-4 flex flex-col items-center justify-center text-stone-500 dark:text-stone-400">
-                      <MdImage className="text-3xl text-amber-600 dark:text-orange-400 mb-1" />
+                      <MdImage className="text-3xl text-amber-950 dark:text-[#d4a373] mb-1" />
                       <span className="text-sm font-medium">Click or drag image here</span>
                       <span className="text-xs text-stone-400 mt-1">PNG, JPG, WebP up to 5MB</span>
                     </div>
@@ -268,7 +268,7 @@ export default function AdminHeroManager() {
 
       {/* Existing Carousel Slides Grid */}
       <div>
-        <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 mb-4">
+        <h3 className="text-base font-bold text-amber-950 dark:text-[#d4a373] mb-4">
           Current Active Slides ({slides.length} of {MAX_HERO_IMAGES})
         </h3>
 
@@ -279,7 +279,7 @@ export default function AdminHeroManager() {
             ))}
           </div>
         ) : slides.length === 0 ? (
-          <div className="text-center py-10 border border-stone-200 dark:border-stone-800 rounded-2xl bg-white dark:bg-stone-800/40">
+          <div className="text-center py-10 border border-stone-200 dark:border-stone-800 rounded-2xl bg-white dark:bg-stone-900">
             <MdImage className="text-4xl text-stone-400 mx-auto mb-2" />
             <p className="text-stone-600 dark:text-stone-300 font-semibold">No custom carousel images uploaded yet.</p>
             <p className="text-xs text-stone-400 mt-1">The public homepage is currently displaying default fallback hero slides.</p>
