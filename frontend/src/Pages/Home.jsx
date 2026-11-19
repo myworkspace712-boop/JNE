@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import HeroCarousel from '../Components/HeroCarousel.jsx';
+import Hero from '../Components/Hero.jsx';
+import Partners from '../Components/Partners.jsx';
+import Reviews from '../Components/Reviews.jsx';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -34,52 +36,40 @@ const Home = () => {
     ];
 
     const handleRequestQuote = (productName) => {
-        navigate('/services', { state: { selectedProduct: productName } });
+        navigate('/contact#your-order-card', { state: { selectedProduct: productName } });
     };
 
     return (
-        <div className="min-h-screen bg-[#faf8f5] dark:bg-black font-sans text-stone-900 dark:text-stone-100 transition-colors duration-300">
+        <div className="min-h-screen bg-stone-50 dark:bg-stone-950 font-sans text-stone-900 dark:text-stone-100 transition-colors duration-300">
             
-            {/* 1. MINIMALIST MODERN HERO CAROUSEL */}
-            <HeroCarousel />
+            {/* 1. HERO SECTION WITH IMAGE PLACE (NO CAROUSEL, NO GLOWING BORDER) */}
+            <Hero />
 
-            {/* LITHRONE MACHINE SECTION */}
-            <section className="py-8 md:py-12 bg-[#faf8f5] dark:bg-black w-full overflow-hidden transition-colors">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-center items-center">
-                        <div className="w-full max-w-xl md:max-w-2xl bg-white rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm hover:shadow-md border border-amber-950/10 dark:border-stone-800 transition-all duration-300">
-                            <img 
-                                src="/images/Machines/lithrone_4_color.jpg" 
-                                alt="Lithrone 4-Colour Offset Machine" 
-                                className="w-full h-auto max-h-[450px] object-contain rounded-2xl mx-auto"
-                                onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = "/machines/lithrone_4_color.jpg";
-                                }}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </section>
+            {/* PARTNERS & SISTER CONCERN SECTION */}
+            <Partners />
+
+            {/* CLIENT REVIEWS & TESTIMONIALS SECTION */}
+            <Reviews />
 
             {/* 2. BULK PRODUCTS CATEGORY SECTION */}
-            <section className="py-16 md:py-24 bg-white/80 dark:bg-stone-950/80 border-t border-b border-amber-950/10 dark:border-stone-800 w-full overflow-hidden transition-colors">
+            <section className="py-20 relative bg-stone-50 dark:bg-stone-950 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#292524_1px,transparent_1px)] [background-size:16px_16px] border-t border-b border-stone-200 dark:border-stone-800 w-full overflow-hidden transition-colors">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     
                     {/* Header Row */}
                     <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12">
-                        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-black tracking-widest uppercase mb-4 shadow-sm
-                                        bg-stone-100 text-amber-950 border border-amber-950/20
-                                        dark:bg-[#c58f5e]/15 dark:text-[#d4a373] dark:border-[#d4a373]/30">
+                        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4 shadow-sm
+                                        bg-amber-950 text-white border border-amber-900
+                                        dark:bg-stone-800 dark:text-[#d4a373] dark:border-stone-700">
+                            <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
                             <span>OUR SERVICES</span>
                         </div>
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-amber-950 dark:text-[#d4a373] tracking-tight mb-6">
-                            We Make Your Business Look Good On Paper
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-amber-950 dark:text-stone-100 tracking-tight mb-6">
+                            Your Brand, Styled on Paper
                         </h2>
                         <div className="flex justify-center">
                             <Link 
                                 to="/services" 
-                                className="group inline-flex items-center space-x-2 font-black text-xs sm:text-sm uppercase tracking-widest text-amber-950 hover:text-amber-800 dark:text-[#d4a373] dark:hover:text-[#c58f5e] transition-all cursor-pointer"
+                                className="group inline-flex items-center space-x-2 font-black text-xs sm:text-sm uppercase tracking-widest text-amber-950 hover:text-amber-800 dark:text-[#d4a373] dark:hover:text-amber-200 transition-all cursor-pointer"
                             >
                                 <span>VIEW FULL CATALOGUE</span>
                                 <svg 
@@ -99,42 +89,28 @@ const Home = () => {
                         {featuredProducts.map((product, index) => (
                             <div 
                                 key={index} 
-                                className="rounded-[1.5rem] p-5 shadow-sm hover:shadow-xl border flex flex-col group hover:-translate-y-1 transition-all duration-300
-                                           bg-white border-amber-950/10 hover:border-amber-950/25
-                                           dark:bg-stone-900 dark:border-stone-800 hover:dark:border-[#d4a373]/40"
+                                onClick={() => handleRequestQuote(product.name)}
+                                className="group bg-white dark:bg-stone-900 rounded-lg p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-stone-200/80 dark:border-stone-800 border-t-4 border-t-amber-900 dark:border-t-[#d4a373] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 flex flex-col justify-between cursor-pointer"
                             >
-                                {/* Image Container */}
-                                <div className="w-full h-48 md:h-56 mb-5 overflow-hidden rounded-2xl bg-stone-100 dark:bg-stone-800 relative">
+                                <div>
+                                    {/* Product Image */}
                                     <img 
                                         src={product.image} 
                                         alt={product.name}
-                                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                                        className="w-full h-48 object-cover rounded mb-6 transition-transform duration-300 group-hover:scale-105"
                                         onError={(e) => { 
                                             e.target.onerror = null; 
                                             e.target.src = `https://via.placeholder.com/400x300?text=${encodeURIComponent(product.name)}`; 
                                         }}
                                     />
-                                </div>
-                                
-                                <div className="flex-1 flex flex-col">
-                                    <h3 className="text-lg md:text-xl font-extrabold text-amber-950 dark:text-white mb-2">
+                                    
+                                    {/* Product Content */}
+                                    <h3 className="text-2xl font-bold text-amber-950 dark:text-white mb-3 group-hover:text-amber-800 dark:group-hover:text-[#d4a373] transition-colors">
                                         {product.name}
                                     </h3>
-                                    <p className="text-stone-500 dark:text-stone-400 text-sm leading-relaxed mb-6 flex-1 pr-2">
+                                    <p className="text-stone-600 dark:text-stone-300 leading-relaxed">
                                         {product.description}
                                     </p>
-                                    
-                                    <button 
-                                        onClick={() => handleRequestQuote(product.name)}
-                                        className="w-full font-bold text-xs py-3.5 px-4 rounded-xl transition-all uppercase tracking-widest flex items-center justify-center space-x-2 cursor-pointer
-                                                   bg-stone-50 hover:bg-amber-950 hover:text-white text-amber-950 border border-stone-200 hover:border-amber-950
-                                                   dark:bg-stone-800 dark:hover:bg-[#c58f5e] dark:text-stone-200 dark:hover:text-black dark:border-stone-700"
-                                    >
-                                        <span>Your Print</span>
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                        </svg>
-                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -144,7 +120,7 @@ const Home = () => {
                     <div className="mt-8 md:hidden flex justify-center">
                         <Link 
                             to="/services" 
-                            className="group inline-flex items-center space-x-2 font-black text-xs sm:text-sm uppercase tracking-widest text-amber-950 hover:text-amber-800 dark:text-[#d4a373] dark:hover:text-[#c58f5e] transition-all cursor-pointer"
+                            className="group inline-flex items-center space-x-2 font-black text-xs sm:text-sm uppercase tracking-widest text-amber-950 hover:text-amber-800 dark:text-[#d4a373] dark:hover:text-amber-200 transition-all cursor-pointer"
                         >
                             <span>VIEW FULL CATALOGUE</span>
                             <svg 

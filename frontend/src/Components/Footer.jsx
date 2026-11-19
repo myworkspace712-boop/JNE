@@ -1,16 +1,70 @@
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
-  return (
-    <footer className="bg-amber-950 text-stone-200 text-xs py-8 border-t border-amber-900 mt-auto transition-colors duration-300 dark:bg-black dark:text-stone-400 dark:border-stone-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 text-center sm:text-left">
-        <p>© 2026 JN Enterprise Printing Industrial Hub. All rights reserved.</p>
-        <div className="flex space-x-6">
-          <Link to="/" className="hover:text-white dark:hover:text-[#d4a373] transition-colors">Home</Link>
-          <Link to="/services" className="hover:text-white dark:hover:text-[#d4a373] transition-colors">Services</Link>
-          <Link to="/about" className="hover:text-white dark:hover:text-[#d4a373] transition-colors">About Us</Link>
-        </div>
-      </div>
-    </footer>
-  );
+    return (
+        <footer className="bg-amber-950 dark:bg-stone-950 text-stone-200 py-12 md:py-16 mt-auto border-t border-amber-900/60 dark:border-stone-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
+                    
+                    {/* 1. Brand Section */}
+                    <div>
+                        <h2 className="text-2xl font-extrabold text-white tracking-tight mb-4">
+                            J.N. Enterprise
+                        </h2>
+                        <p className="text-sm text-stone-300 dark:text-stone-400 leading-relaxed mb-6">
+                            Commercial paper printing and packaging solutions engineered for your company. We make your business look good on paper.
+                        </p>
+                    </div>
+
+                    {/* 2. Navigation Links (Middle) */}
+                    <div>
+                        <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-5">
+                            Quick Links
+                        </h3>
+                        <ul className="space-y-3">
+                            <li>
+                                <Link to="/" className="hover:text-amber-300 dark:hover:text-[#d4a373] transition-colors duration-300">Home</Link>
+                            </li>
+                            <li>
+                                <Link to="/services" className="hover:text-amber-300 dark:hover:text-[#d4a373] transition-colors duration-300">Our Services</Link>
+                            </li>
+                            <li>
+                                <Link to="/about" className="hover:text-amber-300 dark:hover:text-[#d4a373] transition-colors duration-300">About Us</Link>
+                            </li>
+                            <li>
+                                <Link to="/contact" className="hover:text-amber-300 dark:hover:text-[#d4a373] transition-colors duration-300">Contact Us</Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* 3. Address & Contact (Right Side) */}
+                    <div>
+                        <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-5">
+                            Contact Information
+                        </h3>
+                        <div className="space-y-4 text-sm">
+                            <p className="flex items-start">
+                                <svg className="w-5 h-5 mr-3 text-amber-400 dark:text-[#d4a373] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <span>C/145, First Floor, B G Tower,<br />Delhi Darwaja, Ahmedabad,<br />Gujarat, India</span>
+                            </p>
+                            <p className="flex items-center">
+                                <svg className="w-5 h-5 mr-3 text-amber-400 dark:text-[#d4a373] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                <a href="https://www.jne.com" target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 dark:hover:text-[#d4a373] transition-colors duration-300">www.jne.com</a>
+                            </p>
+                            <p className="flex items-center">
+                                <svg className="w-5 h-5 mr-3 text-amber-400 dark:text-[#d4a373] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                <a href="tel:+919879756061" className="hover:text-amber-300 dark:hover:text-[#d4a373] transition-colors duration-300">+91 98797 56061</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                
+                {/* Bottom Copyright */}
+                <div className="mt-12 pt-8 border-t border-amber-900/60 dark:border-stone-800 text-sm text-center text-stone-400">
+                    &copy; {new Date().getFullYear()} J.N. Enterprise. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    );
 }

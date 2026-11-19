@@ -305,16 +305,18 @@ const products = [
   { id: 6, name: 'Flyers', category: 'Marketing Material', description: 'High-volume promotional flyers for events and micro-marketing campaigns.' },
   { id: 7, name: 'Calendar Diary', category: 'Corporate Gifting', description: 'Customized annual diaries, desktop planners, and wall calendars.' },
   { id: 8, name: 'Folders', category: 'Corporate Stationery', description: 'Presentation folders featuring integrated document slots and card holders.' },
-  { id: 9, name: 'ID Card', category: 'Corporate Identity', description: 'Secure PVC identity cards for staff with crisp photo printing.' },
-  { id: 10, name: 'Corporate Invitation', category: 'Marketing Material', description: 'Elegant, premium invitation cards for corporate galas and product launches.' },
-  { id: 11, name: 'Annual Reports', category: 'Corporate Identity', description: 'Professional booklet printing and binding for stakeholder distribution.' },
-  { id: 12, name: 'Paper Bags', category: 'Packaging', description: 'Eco-friendly, durable luxury retail paper bags with rope handles.' },
-  { id: 13, name: 'Box Packaging', category: 'Packaging', description: 'Corrugated and rigid custom product boxes engineered for safe shipping.' },
-  { id: 14, name: 'Flex Banner Vinyl', category: 'Large Format Signage', description: 'Weatherproof indoor/outdoor high-contrast promotional banners.' },
-  { id: 15, name: 'Standee', category: 'Large Format Signage', description: 'Retractable roll-up exhibition standees built for maximum eye-level attention.' },
-  { id: 16, name: 'Bar Code Sticker Roll', category: 'Packaging', description: 'Precision thermal barcode labels matching industrial scanning grids.' },
-  { id: 17, name: 'Trophies', category: 'Corporate Gifting', description: 'Bespoke acrylic, crystal, and wooden recognition awards.' },
-  { id: 18, name: 'Gift Articles', category: 'Corporate Gifting', description: 'Branded premium pens, mugs, tech organizers, and gifting bundles.' }
+  { id: 9, name: 'Office Stationery (Letter Head, Envelope, Business Cards, Id Card)', category: 'Corporate Stationery', description: 'Complete corporate stationery suite including premium custom letterheads, branded envelopes, visiting business cards, and executive staff ID cards.' },
+  { id: 10, name: 'ID Card', category: 'Corporate Identity', description: 'Secure PVC identity cards for staff with crisp photo printing.' },
+  { id: 11, name: 'Paper Bags', category: 'Packaging', description: 'Eco-friendly, durable luxury retail paper bags with rope handles.' },
+  { id: 12, name: 'Box Packaging', category: 'Packaging', description: 'Corrugated and rigid custom product boxes engineered for safe shipping.' },
+  { id: 13, name: 'Sign Boards', category: 'Boards', description: 'Durable acrylic, ACP, LED, and metal sign boards for commercial storefronts and directional guidance.' },
+  { id: 14, name: 'Flex Banner', category: 'Boards', description: 'Weatherproof high-contrast promotional flex banners for events and outdoor advertising.' },
+  { id: 15, name: 'Standee', category: 'Boards', description: 'Retractable roll-up exhibition standees built for maximum eye-level attention.' },
+  { id: 16, name: 'Vinyl', category: 'Boards', description: 'High-grade self-adhesive custom vinyl graphics and prints for indoor/outdoor signage, window graphics, and commercial displays.' },
+  { id: 17, name: 'Foam Board', category: 'Boards', description: 'Lightweight, rigid foam board sheets delivering clean, vibrant printing for exhibitions, point-of-sale displays, and presentations.' },
+  { id: 18, name: 'Bar Code Sticker Rolls', category: 'Packaging', description: 'Precision thermal barcode labels matching industrial scanning grids.' },
+  { id: 19, name: 'Trophies', category: 'Corporate Gifting', description: 'Bespoke acrylic, crystal, and wooden recognition awards.' },
+  { id: 20, name: 'Gift Articles', category: 'Corporate Gifting', description: 'Branded premium pens, mugs, tech organizers, and gifting bundles.' }
 ];
 
 // Product Endpoint

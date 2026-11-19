@@ -1,61 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Products = () => {
-    const location = useLocation();
-    // Local state to track items added to the cart
-    const [cart, setCart] = useState([]);
-    // State to handle the opening/closing of the cart sidebar
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    const navigate = useNavigate();
     // Category filter state
     const [activeCategory, setActiveCategory] = useState('All');
-    // Bulk Quote Form state
-    const [submitStatus, setSubmitStatus] = useState('');
-    const [selectedProductForm, setSelectedProductForm] = useState('');
+    // Hero machine image placed in underlap
+    const heroImage = "/images/Machines/lithrone_4_color.jpg";
 
-    useEffect(() => {
-        if (location.state?.selectedProduct) {
-            setSelectedProductForm(location.state.selectedProduct);
-            const target = document.getElementById('export-quote-section');
-            if (target) {
-                setTimeout(() => {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-            }
-        }
-    }, [location.state]);
-
-    const handleInquirySubmit = async (e) => {
-        e.preventDefault();
-        setSubmitStatus('Sending to Admin...');
-
-        const inquiryData = {
-            Requested_Product: selectedProductForm || e.target.Requested_Product.value,
-            Target_Quantity: e.target.Target_Quantity.value,
-            Client_Email: e.target.Client_Email.value,
-            Delivery_Destination: e.target.Delivery_Destination.value,
-            Additional_Specifications: e.target.Additional_Specifications.value,
-        };
-
-        try {
-            const baseUrl = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000';
-            const response = await fetch(`${baseUrl}/api/request-quote`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(inquiryData)
-            });
-            
-            if (response.ok) {
-                setSubmitStatus('Inquiry Sent Successfully!');
-                setSelectedProductForm('');
-                e.target.reset(); 
-            } else {
-                setSubmitStatus('Failed to send. Please check the backend connection.');
-            }
-        } catch (error) {
-            console.error(error);
-            setSubmitStatus('Error: Cannot connect to server.');
-        }
+    const handleServiceClick = (productName) => {
+        navigate('/contact#your-order-card', { state: { selectedProduct: productName } });
     };
 
     // Dedicated packaging items (Exclusively FBB, Rigid, and Corrugated Boxes)
@@ -118,10 +72,44 @@ const Products = () => {
     // Dedicated Office Stationery item
     const officeStationeryProducts = [
         { 
-            name: "Office Stationery", 
+            name: "Office Stationery (Letter Head, Envelope, Business Cards, Id Card)", 
             category: "Office Stationery", 
             image: "/images/Office_Stationery/together.jpg", 
             description: "Complete corporate stationery suite including premium custom letterheads, branded envelopes, visiting business cards, and executive staff ID cards." 
+        }
+    ];
+
+    // Dedicated Boards and Display Signage items (Sign Boards, Flex Banner, Standee, Vinyl, Foam Board)
+    const boardProducts = [
+        {
+            name: "Sign Boards",
+            category: "Boards",
+            description: "Durable high-impact acrylic, ACP, LED, and metal sign boards for storefronts, directional guidance, and brand displays.",
+            image: "/images/Boards/sign_b.jpg"
+        },
+        {
+            name: "Flex Banner",
+            category: "Boards",
+            description: "High-contrast weatherproof flex vinyl banners for large-scale outdoor advertising, exhibitions, and promotional backdrops.",
+            image: "/images/Boards/flex_b.jpg"
+        },
+        {
+            name: "Standee",
+            category: "Boards",
+            description: "Lightweight, portable roll-up aluminum standees designed for trade fairs, retail showrooms, conferences, and event branding.",
+            image: "/images/Boards/standee.jpg"
+        },
+        {
+            name: "Vinyl",
+            category: "Boards",
+            description: "High-grade self-adhesive custom vinyl graphics and prints for indoor/outdoor signage, window graphics, and commercial displays.",
+            image: "/images/Boards/vinyl_b.jpg"
+        },
+        {
+            name: "Foam Board",
+            category: "Boards",
+            description: "Lightweight, rigid foam board sheets delivering clean, vibrant printing for exhibitions, point-of-sale displays, and presentations.",
+            image: "/images/Boards/foam_b.jpg"
         }
     ];
 
@@ -135,16 +123,17 @@ const Products = () => {
         { name: "Hard Bound Diary", category: "Diaries", image: "/images/Diaries/hard_bound.jpg", description: "Premium case-bound diary with rigid hardcover, gold or debossed foil stamping, and archival paper." },
         { name: "Spiral Diary", category: "Diaries", image: "/images/Diaries/spiral.jpg", description: "Durable metal wire-bound / spiral notebook, lays completely flat with custom printed cover." },
         { name: "Paper Folders", category: "Stationery", image: "/images/paper_folder.jpg", description: "Custom presentation paper folders with inside pockets and business card slits." },
-        { name: "Office Stationery", category: "Office Stationery", image: "/images/Office_Stationery/together.jpg", description: "Complete corporate stationery suite including premium custom letterheads, branded envelopes, visiting business cards, and executive staff ID cards." },
+        { name: "Office Stationery (Letter Head, Envelope, Business Cards, Id Card)", category: "Office Stationery", image: "/images/Office_Stationery/together.jpg", description: "Complete corporate stationery suite including premium custom letterheads, branded envelopes, visiting business cards, and executive staff ID cards." },
         { name: "Corrugated Box", category: "Packaging", image: "/images/Packaging/corrugated_box.jpeg", description: "Multi-ply fluted cardboard boxes (3-ply, 5-ply, 7-ply) engineered for impact resistance and heavy-duty shipping." },
         { name: "FBB (Folding Box Board) Box", category: "Packaging", image: "/images/Packaging/FBB Boxes.jpg", description: "High-grade virgin fiber paperboard ideal for pharmaceuticals, cosmetics, FMCG, and luxury retail folding cartons." },
         { name: "Rigid Box", category: "Packaging", image: "/images/Packaging/rigid_boxes.jpg", description: "Heavy-duty structural chipboard wrapped in custom printed art paper for luxury branding, gifts, and electronics." },
         { name: "Paper Bags", category: "Retail", image: "/images/paper_bags.jpg" },
-        { name: "Bar code & Sticker Roll", category: "Stationery", image: "" },
-        { name: "Annual Reports", category: "Corporate", image: "" },
-        { name: "Corporate Invitation", category: "Marketing", image: "" },
-        { name: "Standee", category: "Corporate", image: "" },
-        { name: "Flex Banner Vinyl", category: "Corporate", image: "" },
+        { name: "Bar code Sticker Rolls", category: "Stationery", image: "/images/barcode_sr.jpg", description: "Precision thermal barcode labels and custom self-adhesive sticker rolls matching industrial scanning grids." },
+        { name: "Sign Boards", category: "Boards", image: "/images/Boards/sign_b.jpg", description: "Durable high-impact acrylic, ACP, LED, and metal sign boards for storefronts, directional guidance, and brand displays." },
+        { name: "Flex Banner", category: "Boards", image: "/images/Boards/flex_b.jpg", description: "High-contrast weatherproof flex vinyl banners for large-scale outdoor advertising, exhibitions, and promotional backdrops." },
+        { name: "Standee", category: "Boards", image: "/images/Boards/standee.jpg", description: "Lightweight, portable roll-up aluminum standees designed for trade fairs, retail showrooms, conferences, and event branding." },
+        { name: "Vinyl", category: "Boards", image: "/images/Boards/vinyl_b.jpg", description: "High-grade self-adhesive custom vinyl graphics and prints for indoor/outdoor signage, window graphics, and commercial displays." },
+        { name: "Foam Board", category: "Boards", image: "/images/Boards/foam_b.jpg", description: "Lightweight, rigid foam board sheets delivering clean, vibrant printing for exhibitions, point-of-sale displays, and presentations." },
         { name: "Gift Articles", category: "Corporate", image: "/images/gift_articles.jpg" },
         { name: "Trophies", category: "Corporate", image: "/images/trophies.jpg" }
     ];
@@ -163,6 +152,16 @@ const Products = () => {
             return calendarProducts;
         }
 
+        if (activeCategory === 'Boards') {
+            return boardProducts;
+        }
+
+        if (activeCategory === 'Others') {
+            return standardProducts.filter(p => 
+                !['Packaging', 'Diaries', 'Calendars', 'Boards'].includes(p.category)
+            );
+        }
+
         return standardProducts;
     };
 
@@ -172,137 +171,109 @@ const Products = () => {
         { id: 'All', label: 'All Services' },
         { id: 'Packaging', label: 'Packaging' },
         { id: 'Diaries', label: 'Diaries' },
-        { id: 'Calendars', label: 'Calendars' }
+        { id: 'Calendars', label: 'Calendars' },
+        { id: 'Boards', label: 'Boards' },
+        { id: 'Others', label: 'Others' }
     ];
 
-    // Function that ONLY adds to the cart array
-    const handleAddToCart = (product) => {
-        setCart((prevCart) => [...prevCart, product]);
-    };
-
-    // Function to remove a specific item from the cart
-    const handleRemoveFromCart = (indexToRemove) => {
-        setCart((prevCart) => prevCart.filter((_, index) => index !== indexToRemove));
-    };
-
     return (
-        <div className="min-h-screen bg-[#faf8f5] dark:bg-black py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative w-full overflow-x-hidden transition-colors">
+        <div className="min-h-screen bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 relative w-full overflow-x-hidden transition-colors duration-300">
             
-            {/* Clickable Floating Cart Counter */}
-            <button 
-                onClick={() => setIsCartOpen(true)}
-                className="fixed bottom-5 right-5 sm:bottom-auto sm:top-8 sm:right-8 px-4 py-2.5 sm:py-2 rounded-full shadow-xl font-semibold text-sm sm:text-base z-40 transition-all focus:outline-none cursor-pointer flex items-center space-x-2 active:scale-95
-                           bg-amber-950 hover:bg-amber-900 text-white border border-amber-950/20
-                           dark:bg-[#c58f5e] dark:hover:bg-[#b88050] dark:text-black dark:border-[#c58f5e] dark:shadow-[0_0_20px_rgba(212,163,115,0.3)]"
-            >
-                <span>🛒 Cart: {cart.length}</span>
-                <span className="hidden sm:inline">items</span>
-            </button>
-
-            {/* Cart Slide-out Sidebar Modal */}
-            {isCartOpen && (
-                <div className="fixed inset-0 z-50 flex justify-end">
-                    {/* Dark background overlay */}
-                    <div 
-                        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-                        onClick={() => setIsCartOpen(false)}
-                    ></div>
+            {/* 1. Our Services Hero Section - Image Underlapping Text */}
+            <div className="relative w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
+                <div className="relative w-full max-w-7xl mx-auto min-h-[420px] sm:min-h-[480px] md:min-h-[520px] rounded-[2rem] overflow-hidden shadow-xl bg-amber-950 border border-amber-900/60 dark:bg-stone-900 dark:border dark:border-stone-700 dark:shadow-[0_15px_45px_rgba(0,0,0,0.6)] dark:ring-1 dark:ring-stone-600/40 flex flex-col justify-end">
                     
-                    {/* Sidebar Panel */}
-                    <div className="relative w-full max-w-sm sm:max-w-md bg-white dark:bg-black text-stone-900 dark:text-stone-100 h-full shadow-2xl flex flex-col transform transition-transform overflow-y-auto z-10 border-l border-amber-950/10 dark:border-stone-800">
-                        <div className="p-4 sm:p-6 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
-                            <h2 className="text-xl sm:text-2xl font-bold text-amber-950 dark:text-[#d4a373]">Your Cart</h2>
-                            <button 
-                                onClick={() => setIsCartOpen(false)} 
-                                className="text-stone-400 hover:text-amber-950 dark:hover:text-[#d4a373] text-3xl font-semibold focus:outline-none cursor-pointer p-1"
-                            >
-                                &times;
-                            </button>
-                        </div>
-
-                        <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
-                            {cart.length === 0 ? (
-                                <p className="text-stone-500 dark:text-stone-400 text-center mt-10">Your cart is empty.</p>
-                            ) : (
-                                <ul className="space-y-4 sm:space-y-6">
-                                    {cart.map((item, index) => (
-                                        <li key={index} className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-4 gap-3">
-                                            <div className="flex items-center space-x-3 sm:space-x-4 min-w-0">
-                                                <div className="h-12 w-12 bg-stone-100 dark:bg-stone-800 rounded-lg overflow-hidden flex-shrink-0">
-                                                    <img 
-                                                        src={item.image || "https://via.placeholder.com/150?text=J.N.+Enterprise"} 
-                                                        alt={item.name} 
-                                                        className="h-full w-full object-cover" 
-                                                        onError={(e) => {
-                                                            e.currentTarget.onerror = null;
-                                                            e.currentTarget.src = "https://via.placeholder.com/150?text=J.N.+Enterprise";
-                                                        }}
-                                                    />
-                                                </div>
-                                                <span className="font-medium text-stone-800 dark:text-stone-200 text-sm sm:text-base truncate">{item.name}</span>
-                                            </div>
-                                            <button 
-                                                onClick={() => handleRemoveFromCart(index)}
-                                                className="text-red-600 hover:text-red-700 dark:text-red-400 text-xs sm:text-sm font-medium hover:underline cursor-pointer flex-shrink-0"
-                                            >
-                                                Remove
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
+                    {/* Underlapping Image / Placeholder Layer */}
+                    <div className="absolute inset-0 z-0 bg-amber-950 dark:bg-stone-900">
+                        {heroImage ? (
+                            <img 
+                                src={heroImage} 
+                                alt="Komori Lithrone 4-Colour Offset Machine" 
+                                className="w-full h-full object-cover object-center"
+                                onError={(e) => {
+                                    if (!e.currentTarget.src.includes('/machines/')) {
+                                        e.currentTarget.src = '/machines/lithrone_4_color.jpg';
+                                    } else {
+                                        e.currentTarget.style.display = 'none';
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <div className="w-full h-full border-2 border-dashed border-white/20 dark:border-stone-600/80 flex flex-col items-center justify-center p-6 text-center bg-amber-900/30 dark:bg-[#1a1715]/90">
+                                <div className="flex flex-col items-center justify-center text-amber-200/60 dark:text-stone-300 pointer-events-none">
+                                    <svg className="w-14 h-14 mb-3 stroke-[1.5] dark:text-stone-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                    </svg>
+                                    <span className="text-sm font-extrabold uppercase tracking-wider text-white/90 dark:text-white">Hero Underlap Image Space</span>
+                                    <span className="text-xs text-amber-200/70 dark:text-stone-300 mt-1 font-medium">Image will underlap the text content here</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
+
+                    {/* Gradient Overlay for Text Readability & Contrast */}
+                    <div 
+                        className="absolute inset-0 z-10 bg-gradient-to-t from-amber-950 via-amber-950/80 to-amber-950/20 dark:from-stone-950/95 dark:via-stone-950/50 dark:to-transparent pointer-events-none" 
+                        aria-hidden="true"
+                    />
+                    <div 
+                        className="absolute inset-0 z-10 bg-gradient-to-r from-amber-950/90 via-amber-950/60 to-transparent dark:from-stone-950/85 dark:via-stone-950/40 dark:to-transparent hidden sm:block pointer-events-none" 
+                        aria-hidden="true"
+                    />
+
+                    {/* Text Above Image (Layered On Top) */}
+                    <div className="relative z-20 p-6 sm:p-10 md:p-14 lg:p-16 max-w-4xl text-left">
+                        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4 shadow-sm
+                                        bg-white/10 text-white border border-white/20 backdrop-blur-md dark:bg-stone-800/95 dark:border-stone-600 dark:text-stone-100">
+                            <span className="h-2 w-2 rounded-full bg-amber-400 dark:bg-[#d4a373] animate-pulse"></span>
+                            <span>COMMERCIAL &amp; INDUSTRIAL PRINTING</span>
+                        </div>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white dark:text-white tracking-tight mb-4 drop-shadow-xl">
+                            OUR SERVICES
+                        </h1>
+                        <p className="text-base sm:text-lg md:text-xl text-amber-100 dark:text-stone-200 leading-relaxed font-medium drop-shadow-lg max-w-2xl">
+                            Making your business undeniably good on paper. Discover our capabilities in commercial offset printing, premium rigid packaging, corporate stationery, and much more.
+                        </p>
+                    </div>
+
                 </div>
-            )}
+            </div>
 
-            <div className="max-w-7xl mx-auto">
-                {/* Header & Tagline */}
-                <div className="text-center mb-8 sm:mb-10">
-                    <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-black tracking-widest uppercase mb-4 shadow-sm
-                                    bg-stone-100 text-amber-950 border border-amber-950/20
-                                    dark:bg-[#c58f5e]/15 dark:text-[#d4a373] dark:border-[#d4a373]/30">
-                        <span>📦 Bulk Ordering</span>
-                    </div>
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-amber-950 dark:text-[#d4a373] mb-2 sm:mb-3 tracking-tight">
-                        SERVICES
-                    </h1>
-                    <p className="text-sm sm:text-base md:text-lg italic text-stone-600 dark:text-stone-400 px-4 max-w-2xl mx-auto mb-6">
-                        "Design is a behavior not a Department....."
-                    </p>
-
-                    {/* Category Filter Tabs */}
-                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-                        {categories.map((cat) => (
+            <div className="max-w-7xl mx-auto py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
+                {/* Category Filter Tabs - Dark Stone in Dark Mode */}
+                <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10 sm:mb-12">
+                    {categories.map((cat) => {
+                        const isActive = activeCategory === cat.id;
+                        return (
                             <button
                                 key={cat.id}
                                 onClick={() => setActiveCategory(cat.id)}
                                 className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                                    activeCategory === cat.id
-                                        ? 'bg-amber-950 text-white shadow-md scale-105 border border-amber-950 dark:bg-[#c58f5e] dark:text-black dark:border-[#c58f5e]'
-                                        : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200 dark:bg-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:border-stone-800'
+                                    isActive
+                                        ? 'bg-amber-950 text-white shadow-md scale-105 border border-amber-900 ring-2 ring-amber-500/40 dark:bg-stone-800 dark:border-stone-700 dark:text-[#d4a373] dark:ring-stone-600/40'
+                                        : 'bg-white text-stone-700 hover:text-amber-950 hover:bg-amber-50/70 border border-stone-200 hover:border-amber-300 dark:bg-stone-900 dark:text-stone-300 dark:hover:text-stone-100 dark:hover:bg-stone-800 dark:border-stone-800'
                                 }`}
                             >
                                 {cat.label}
                             </button>
-                        ))}
-                    </div>
+                        );
+                    })}
                 </div>
 
-                {/* Responsive Product Grid */}
+                {/* Responsive Service Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                     {displayedProducts.map((product, index) => (
                         <div 
                             key={index} 
-                            className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col border border-stone-200 hover:border-amber-950/30 overflow-hidden hover:-translate-y-1
-                                       dark:bg-stone-900 dark:border-stone-800 hover:dark:border-[#d4a373]/40"
+                            onClick={() => handleServiceClick(product.name)}
+                            className="group bg-white dark:bg-stone-900 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col border border-amber-950/10 dark:border-stone-800 hover:border-amber-900/50 dark:hover:border-stone-600 overflow-hidden hover:-translate-y-1 cursor-pointer"
                         >
-                            {/* Product Image Card */}
-                            <div className="h-44 sm:h-48 lg:h-52 w-full bg-stone-100 dark:bg-stone-800 overflow-hidden flex items-center justify-center relative">
+                            {/* Service Image Card */}
+                            <div className="h-44 sm:h-48 lg:h-52 w-full bg-amber-50/30 dark:bg-stone-950 overflow-hidden flex items-center justify-center relative">
                                 <img 
                                     src={product.image || "https://via.placeholder.com/400x300?text=J.N.+Enterprise"} 
                                     alt={product.name}
-                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                     onError={(e) => {
                                         e.currentTarget.onerror = null;
                                         e.currentTarget.src = `https://via.placeholder.com/400x300?text=${encodeURIComponent(product.name)}`;
@@ -310,173 +281,69 @@ const Products = () => {
                                 />
                             </div>
 
-                            {/* Product Title & Details */}
-                            <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between text-center">
-                                <div>
-                                    <h3 className="text-base sm:text-lg font-bold text-amber-950 dark:text-white mb-2">
-                                        {product.name}
-                                    </h3>
-                                    
-                                    {product.description && (
-                                        <p className="text-stone-500 dark:text-stone-400 text-xs sm:text-sm leading-relaxed mb-4 line-clamp-3">
-                                            {product.description}
-                                        </p>
+                            {/* Service Content Name */}
+                            <div className="p-4 sm:p-5 flex-1 flex flex-col justify-center text-center">
+                                <h3 className="text-base sm:text-lg font-bold text-amber-950 dark:text-stone-100 group-hover:text-amber-800 dark:group-hover:text-[#d4a373] transition-colors">
+                                    {product.name.includes(" (") && product.name.startsWith("Office Stationery") ? (
+                                        <>
+                                            <span className="block">{product.name.split(" (")[0]}</span>
+                                            <span className="block text-xs sm:text-sm font-semibold text-amber-800/85 dark:text-stone-400 mt-1 tracking-tight">
+                                                ({product.name.split(" (")[1]}
+                                            </span>
+                                        </>
+                                    ) : (
+                                        product.name
                                     )}
+                                </h3>
 
-                                    {/* Quick link on parent Box Packaging card to explore sub-types */}
-                                    {product.isParentBox && (
-                                        <button
-                                            onClick={() => {
-                                                setActiveCategory('Packaging');
-                                            }}
-                                            className="mb-4 inline-flex items-center text-xs font-bold text-amber-900 hover:text-amber-950 dark:text-[#d4a373] dark:hover:text-amber-200 transition-colors cursor-pointer"
-                                        >
-                                            View FBB, Rigid & Corrugated Boxes →
-                                        </button>
-                                    )}
-                                </div>
-                                
-                                <button
-                                    onClick={() => handleAddToCart(product)}
-                                    className="w-full font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl transition-colors cursor-pointer active:scale-95 mt-auto
-                                               bg-amber-950 hover:bg-amber-900 text-white
-                                               dark:bg-[#c58f5e] dark:hover:bg-[#b88050] dark:text-black"
-                                >
-                                    Your Order
-                                </button>
+                                {/* Quick link on parent Box Packaging card to explore sub-types */}
+                                {product.isParentBox && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveCategory('Packaging');
+                                        }}
+                                        className="mt-2 inline-flex items-center justify-center text-xs font-bold text-amber-800 hover:text-amber-950 dark:text-[#d4a373] dark:hover:text-white transition-colors cursor-pointer"
+                                    >
+                                        View FBB, Rigid & Corrugated Boxes →
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* The Bulk Order Request Card / Inquiry Form */}
-                <div id="export-quote-section" className="max-w-4xl mx-auto rounded-[2.5rem] shadow-xl border p-8 md:p-12 mt-20 mb-8 scroll-mt-24
-                                                        bg-white border-amber-950/10 text-amber-950
-                                                        dark:bg-stone-950 dark:border-stone-800 dark:text-stone-100">
-                    <div className="text-center mb-10">
-                        <h2 className="text-3xl md:text-5xl font-black text-amber-950 dark:text-[#d4a373] tracking-tight mb-4">
-                            Your Order
+                {/* Bottom Call-to-Action - Deep Amber in Light, Dark Stone in Dark Mode */}
+                <div className="mt-16 sm:mt-20 bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 dark:from-stone-900 dark:via-stone-900 dark:to-stone-900 text-white dark:text-stone-100 rounded-3xl p-8 sm:p-12 shadow-xl border border-amber-900/60 dark:border-stone-800 text-left relative overflow-hidden">
+                    <div className="max-w-2xl relative z-10">
+                        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 bg-white/10 text-white border border-white/20 dark:bg-stone-800 dark:border-stone-700 dark:text-stone-300">
+                            <span>Ready to Print</span>
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-black mb-3 text-white dark:text-stone-100">
+                            Looking for Custom Packaging or Commercial Printing?
                         </h2>
-                        <p className="text-base md:text-lg text-stone-500 dark:text-stone-400 max-w-2xl mx-auto">
-                            Submit your desired quantity, specifications, and destination for a custom commercial quotation.
+                        <p className="text-white/90 dark:text-stone-300 text-sm sm:text-base mb-6 leading-relaxed">
+                            Connect directly with us for quality printing, and on-time delivery.
                         </p>
-                    </div>
-
-                    <form className="text-left space-y-6 max-w-3xl mx-auto" onSubmit={handleInquirySubmit}>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">
-                                    Select Product
-                                </label>
-                                <select 
-                                    name="Requested_Product" 
-                                    required
-                                    className="w-full border rounded-xl px-4 py-3.5 outline-none transition-colors
-                                               border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 text-stone-900
-                                               dark:border-stone-700 dark:bg-stone-900 dark:focus:bg-black dark:focus:border-[#d4a373] dark:text-white" 
-                                    value={selectedProductForm}
-                                    onChange={(e) => setSelectedProductForm(e.target.value)}
-                                >
-                                    <option value="" disabled>Select Product...</option>
-                                    <option value="Brochures">Brochures</option>
-                                    <option value="Catalogues">Catalogues</option>
-                                    <option value="Flyers">Flyers</option>
-                                    <option value="Wall Calendar">Wall Calendar</option>
-                                    <option value="Table Calendar">Table Calendar</option>
-                                    <option value="Hard Bound Diary">Hard Bound Diary</option>
-                                    <option value="Spiral Diary">Spiral Diary</option>
-                                    <option value="Paper Folders">Paper Folders</option>
-                                    <option value="Office Stationery">Office Stationery</option>
-                                    <option value="Corrugated Box">Corrugated Box</option>
-                                    <option value="FBB (Folding Box Board) Box">FBB (Folding Box Board) Box</option>
-                                    <option value="Rigid Box">Rigid Box</option>
-                                    <option value="Paper Bags">Paper Bags</option>
-                                    <option value="Bar code & Sticker Roll">Bar code & Sticker Roll</option>
-                                    <option value="Annual Reports">Annual Reports</option>
-                                    <option value="Corporate Invitation">Corporate Invitation</option>
-                                    <option value="Standee">Standee</option>
-                                    <option value="Flex Banner Vinyl">Flex Banner Vinyl</option>
-                                    <option value="Gift Articles">Gift Articles</option>
-                                    <option value="Trophies">Trophies</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">
-                                    Target Quantity
-                                </label>
-                                <input 
-                                    type="text" 
-                                    name="Target_Quantity"
-                                    required
-                                    placeholder="e.g. 1,000 units" 
-                                    className="w-full border rounded-xl px-4 py-3.5 outline-none transition-colors
-                                               border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 text-stone-900
-                                               dark:border-stone-700 dark:bg-stone-900 dark:focus:bg-black dark:focus:border-[#d4a373] dark:text-white" 
-                                />
-                            </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">
-                                    Client Email
-                                </label>
-                                <input 
-                                    type="email" 
-                                    name="Client_Email"
-                                    required
-                                    placeholder="company@domain.com" 
-                                    className="w-full border rounded-xl px-4 py-3.5 outline-none transition-colors
-                                               border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 text-stone-900
-                                               dark:border-stone-700 dark:bg-stone-900 dark:focus:bg-black dark:focus:border-[#d4a373] dark:text-white" 
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">
-                                    Delivery Location
-                                </label>
-                                <input 
-                                    type="text" 
-                                    name="Delivery_Destination"
-                                    required
-                                    placeholder="City or Port" 
-                                    className="w-full border rounded-xl px-4 py-3.5 outline-none transition-colors
-                                               border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 text-stone-900
-                                               dark:border-stone-700 dark:bg-stone-900 dark:focus:bg-black dark:focus:border-[#d4a373] dark:text-white" 
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">
-                                Additional Specifications
-                            </label>
-                            <textarea 
-                                rows="4" 
-                                name="Additional_Specifications"
-                                placeholder="Paper GSM, surface lamination, dimensions, or custom box finish requirements..." 
-                                className="w-full border rounded-xl px-4 py-3.5 outline-none resize-none transition-colors
-                                           border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 text-stone-900
-                                           dark:border-stone-700 dark:bg-stone-900 dark:focus:bg-black dark:focus:border-[#d4a373] dark:text-white"
-                            ></textarea>
-                        </div>
-
-                        <button 
-                            type="submit" 
-                            disabled={submitStatus === 'Sending to Admin...'}
-                            className="w-full font-black text-sm uppercase tracking-widest py-4 rounded-xl shadow-lg transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed
-                                       bg-amber-950 hover:bg-amber-900 text-white border border-amber-950/20
-                                       dark:bg-[#c58f5e] dark:hover:bg-[#b88050] dark:text-black dark:border-[#c58f5e] dark:shadow-[0_0_20px_rgba(212,163,115,0.3)]"
+                        <Link
+                            to="/contact#your-order-card"
+                            className="group inline-flex items-center justify-center font-bold text-sm sm:text-base px-8 py-3.5 rounded-2xl transition-all duration-300 cursor-pointer active:scale-95 shadow-lg
+                                       bg-amber-950 hover:bg-amber-900 text-white border border-amber-800/80 shadow-amber-950/40
+                                       dark:bg-stone-800 dark:hover:bg-stone-700 dark:text-[#d4a373] dark:border dark:border-stone-700 dark:shadow-black/40"
                         >
-                            {submitStatus === 'Sending to Admin...' ? 'Processing...' : 'Submit Inquiry'}
-                        </button>
-
-                        {submitStatus && (
-                            <p className="text-center text-sm font-bold text-amber-950 dark:text-[#d4a373] mt-4 animate-fade-in">
-                                {submitStatus}
-                            </p>
-                        )}
-                    </form>
+                            <span className="inline-flex items-center space-x-2.5 transition-transform duration-300 group-hover:scale-110 origin-center">
+                                <span>ORDER</span>
+                                <svg 
+                                    className="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-2" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </span>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

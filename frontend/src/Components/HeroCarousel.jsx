@@ -19,11 +19,11 @@ const MAX_HERO_SLIDES = 5;
 const DEFAULT_SLIDES = [
   {
     _id: 'default-1',
-    imageUrl: '/machines/4_colour.jpg',
+    imageUrl: '/images/Machines/lithrone_4_color.jpg',
     tag: 'Offset Printing Hub',
     title: 'High-Speed 4-Colour Offset Printing',
     highlight: 'Offset Printing',
-    subtitle: 'Heidelberg Alcolour offset machinery delivering high-volume B2B commercial printing with micrometer registration accuracy.',
+    subtitle: 'Komori Lithrone 4-colour offset machinery delivering high-volume B2B commercial printing with micrometer registration accuracy.',
     ctaPrimary: 'Inquire Now',
     ctaPrimaryLink: '/services',
     ctaSecondary: 'View Products',
@@ -112,6 +112,11 @@ export default function HeroCarousel() {
         try {
           const parsed = JSON.parse(cached);
           if (Array.isArray(parsed) && parsed.length > 0) {
+            // Update 1st slide if it still has old 4_colour image or default-1
+            if (parsed[0] && (parsed[0]._id === 'default-1' || parsed[0].imageUrl?.includes('4_colour'))) {
+              parsed[0].imageUrl = '/images/Machines/lithrone_4_color.jpg';
+              parsed[0].subtitle = DEFAULT_SLIDES[0].subtitle;
+            }
             // Ensure corrugated box is in parsed slides
             const hasCorrugated = parsed.some(s => s.imageUrl?.includes('corrugated_box'));
             if (!hasCorrugated) {
@@ -391,8 +396,8 @@ export default function HeroCarousel() {
       {/* Outer Framed Carousel Container */}
       <div
         className="relative w-full h-[480px] sm:h-[540px] md:h-[620px] rounded-[2rem] overflow-hidden shadow-2xl transition-all duration-300
-                   border-2 border-amber-950/20 bg-stone-100
-                   dark:border-2 dark:border-[#d4a373]/30 dark:bg-black dark:shadow-[0_0_35px_rgba(212,163,115,0.08)]
+                   border-2 border-amber-900/40 bg-amber-950
+                   dark:border-2 dark:border-stone-700 dark:bg-stone-900 dark:shadow-[0_0_35px_rgba(0,0,0,0.6)]
                    group select-none"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -424,13 +429,21 @@ export default function HeroCarousel() {
                 }}
               />
 
-              {/* Clean Dark Vignette Overlay for Text Legibility (No Brown Tint) */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/25 to-transparent hidden sm:block" />
+              {/* Clean Dark Amber Vignette Overlay for Text Legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-amber-950/95 via-amber-950/50 to-transparent dark:from-stone-950/95 dark:via-stone-950/50 dark:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-950/90 via-amber-950/35 to-transparent dark:from-stone-950/90 dark:via-stone-950/35 dark:to-transparent hidden sm:block" />
 
               {/* Slide Content Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 md:p-14 lg:p-16 z-20 max-w-3xl text-left">
                 
+                {/* Pill Tag */}
+                {slide.tag && (
+                  <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 shadow-xs bg-white/10 text-white border border-white/20">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse"></span>
+                    <span>{slide.tag}</span>
+                  </div>
+                )}
+
                 {/* Main Headline */}
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.12] drop-shadow-md mb-4">
                   {slide.title}
@@ -438,7 +451,7 @@ export default function HeroCarousel() {
 
                 {/* Subtitle / Description */}
                 {slide.subtitle && (
-                  <p className="text-stone-200/95 dark:text-stone-300 text-sm sm:text-base md:text-lg max-w-xl font-normal leading-relaxed mb-8 drop-shadow">
+                  <p className="text-amber-100/90 dark:text-stone-300 text-sm sm:text-base md:text-lg max-w-xl font-normal leading-relaxed mb-8 drop-shadow">
                     {slide.subtitle}
                   </p>
                 )}
@@ -448,9 +461,9 @@ export default function HeroCarousel() {
                   {/* Primary CTA: GET QUOTE with right-facing arrow */}
                   <Link
                     to={slide.ctaPrimaryLink || '/services'}
-                    className="inline-flex items-center justify-center font-black text-xs sm:text-sm uppercase tracking-widest px-8 py-3.5 rounded-full shadow-lg transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0
-                               bg-white hover:bg-stone-100 text-amber-950 border border-white/60
-                               dark:bg-[#c58f5e] dark:hover:bg-[#b88050] dark:text-black dark:border-[#c58f5e] dark:shadow-[0_0_20px_rgba(212,163,115,0.35)]"
+                    className="inline-flex items-center justify-center font-bold text-xs sm:text-sm uppercase tracking-widest px-8 py-3.5 rounded-2xl shadow-lg transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0
+                               bg-white hover:bg-amber-50 text-amber-950 border border-white/80 shadow-amber-950/50
+                               dark:bg-stone-800 dark:hover:bg-stone-700 dark:text-[#d4a373] dark:border-stone-700"
                   >
                     <span>GET QUOTE</span>
                     <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -470,8 +483,8 @@ export default function HeroCarousel() {
             onClick={prevSlide}
             aria-label="Previous Slide"
             className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer
-                       bg-amber-950/60 hover:bg-amber-950/90 text-white border border-white/30
-                       dark:bg-black/70 dark:hover:bg-black dark:text-[#d4a373] dark:border-[#d4a373]/50"
+                       bg-amber-950/80 hover:bg-amber-900 text-white border border-amber-800/60
+                       dark:bg-stone-900/80 dark:hover:bg-stone-800 dark:text-[#d4a373] dark:border-stone-700/60"
           >
             <MdChevronLeft className="text-2xl sm:text-3xl" />
           </button>
@@ -483,23 +496,21 @@ export default function HeroCarousel() {
             onClick={nextSlide}
             aria-label="Next Slide"
             className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer
-                       bg-amber-950/60 hover:bg-amber-950/90 text-white border border-white/30
-                       dark:bg-black/70 dark:hover:bg-black dark:text-[#d4a373] dark:border-[#d4a373]/50"
+                       bg-amber-950/80 hover:bg-amber-900 text-white border border-amber-800/60
+                       dark:bg-stone-900/80 dark:hover:bg-stone-800 dark:text-[#d4a373] dark:border-stone-700/60"
           >
             <MdChevronRight className="text-2xl sm:text-3xl" />
           </button>
         )}
 
-        {/* Centered Bottom Bar: Pagination Indicators (Slider dot that elongates to horizontal line while switching, then returns to a dot) */}
+        {/* Centered Bottom Bar: Pagination Indicators */}
         {slides.length > 1 && (
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 sm:bottom-7 z-30 flex items-center backdrop-blur-md px-4 py-2 rounded-full border
-                          bg-amber-950/60 border-white/30
-                          dark:bg-black/80 dark:border-[#d4a373]/40">
+                          bg-amber-950/80 border-amber-800/60 dark:bg-stone-900/90 dark:border-stone-700">
             {/* Pagination Indicators */}
             <div className="flex items-center gap-2.5">
               {slides.map((_, dotIdx) => {
                 const isActive = currentIndex === dotIdx;
-                // While transitioning to this slide, it expands into a horizontal line, then returns to a dot
                 const isLine = isActive && isAnimating;
                 return (
                   <button
@@ -508,10 +519,10 @@ export default function HeroCarousel() {
                     aria-label={`Go to slide ${dotIdx + 1}`}
                     className={`rounded-full transition-all duration-300 ease-out cursor-pointer ${
                       isLine
-                        ? 'w-7 sm:w-8 h-2 bg-white shadow-sm dark:bg-[#d4a373] dark:shadow-[0_0_8px_rgba(212,163,115,0.8)]'
+                        ? 'w-7 sm:w-8 h-2 bg-white shadow-sm shadow-white/60'
                         : isActive
-                        ? 'w-2.5 h-2.5 bg-white shadow-sm dark:bg-[#d4a373] dark:shadow-[0_0_8px_rgba(212,163,115,0.8)] scale-110'
-                        : 'w-2 h-2 bg-white/40 hover:bg-white/70 dark:bg-stone-700 dark:hover:bg-[#d4a373]/70'
+                        ? 'w-2.5 h-2.5 bg-white shadow-sm shadow-white/60 scale-110'
+                        : 'w-2 h-2 bg-white/40 hover:bg-white/70'
                     }`}
                   />
                 );
@@ -529,13 +540,13 @@ export default function HeroCarousel() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
           <div 
             className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 shadow-2xl border
-                       bg-white text-amber-950 border-amber-950/15
-                       dark:bg-black dark:text-stone-100 dark:border-[#d4a373]/40 dark:shadow-[0_0_40px_rgba(0,0,0,0.9)]"
+                       bg-white text-stone-900 border-amber-950/20
+                       dark:bg-stone-900 dark:text-stone-100 dark:border-stone-700 dark:shadow-[0_0_40px_rgba(0,0,0,0.9)]"
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-amber-950/10 dark:border-stone-800">
+            <div className="flex items-center justify-between pb-4 border-b border-stone-200 dark:border-stone-800">
               <div>
-                <h3 className="text-xl font-black text-amber-950 dark:text-[#d4a373] tracking-tight">
+                <h3 className="text-xl font-black text-amber-950 dark:text-stone-100 tracking-tight">
                   Hero Carousel Images
                 </h3>
                 <p className="text-xs text-stone-600 dark:text-stone-400 mt-0.5">
@@ -550,21 +561,21 @@ export default function HeroCarousel() {
                 }}
                 className="w-9 h-9 rounded-full flex items-center justify-center transition-colors cursor-pointer
                            bg-stone-100 hover:bg-stone-200 text-amber-950
-                           dark:bg-stone-900 dark:hover:bg-stone-800 dark:text-[#d4a373]"
+                           dark:bg-stone-800 dark:hover:bg-stone-700 dark:text-[#d4a373]"
               >
                 <MdClose className="text-xl" />
               </button>
             </div>
 
             {/* Slide Limit Progress Meter */}
-            <div className="my-5 p-4 rounded-2xl border bg-stone-50 dark:bg-stone-950 border-amber-950/10 dark:border-stone-800">
+            <div className="my-5 p-4 rounded-2xl border bg-stone-50 dark:bg-stone-950 border-stone-200 dark:border-stone-800">
               <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider mb-2">
                 <span className="text-stone-700 dark:text-stone-300">Slots Used</span>
                 <span className="text-amber-950 dark:text-[#d4a373] font-extrabold">{slides.length} of {MAX_HERO_SLIDES} slots</span>
               </div>
               <div className="w-full h-2.5 rounded-full bg-stone-200 dark:bg-stone-800 overflow-hidden">
                 <div 
-                  className="h-full bg-amber-950 transition-all duration-500 rounded-full dark:bg-[#c58f5e] dark:shadow-[0_0_10px_rgba(212,163,115,0.6)]"
+                  className="h-full bg-amber-950 transition-all duration-500 rounded-full dark:bg-[#d4a373]"
                   style={{ width: `${(slides.length / MAX_HERO_SLIDES) * 100}%` }}
                 />
               </div>
@@ -577,8 +588,8 @@ export default function HeroCarousel() {
               </div>
             )}
             {uploadSuccess && (
-              <div className="mb-4 p-3.5 rounded-xl text-xs font-semibold flex items-center gap-2 bg-green-50 text-green-700 border border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-800">
-                <MdCheckCircle className="text-base flex-shrink-0" />
+              <div className="mb-4 p-3.5 rounded-xl text-xs font-semibold flex items-center gap-2 bg-amber-50 text-amber-950 border border-amber-200 dark:bg-stone-950/40 dark:text-[#d4a373] dark:border-stone-800">
+                <MdCheckCircle className="text-base flex-shrink-0 text-amber-700 dark:text-[#d4a373]" />
                 <span>{uploadSuccess}</span>
               </div>
             )}
@@ -659,13 +670,13 @@ export default function HeroCarousel() {
                   disabled={uploading || (!selectedFile && !filePreview)}
                   className="w-full py-3.5 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-widest shadow-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed
                              bg-amber-950 hover:bg-amber-900 text-white
-                             dark:bg-[#c58f5e] dark:hover:bg-[#b88050] dark:text-black dark:border-[#c58f5e] dark:shadow-[0_0_15px_rgba(212,163,115,0.3)]"
+                             dark:bg-stone-800 dark:hover:bg-stone-700 dark:text-[#d4a373]"
                 >
                   {uploading ? 'Adding Image...' : 'Add Image to Carousel'}
                 </button>
               </form>
             ) : (
-              <div className="p-4 rounded-2xl mb-6 text-center border bg-stone-50 border-amber-950/15 dark:bg-stone-950 dark:border-stone-800">
+              <div className="p-4 rounded-2xl mb-6 text-center border bg-stone-50 border-stone-200 dark:bg-stone-950 dark:border-stone-800">
                 <span className="text-xs font-bold text-amber-950 dark:text-[#d4a373]">
                   Maximum of 5 slides reached. Delete an existing slide below to upload a new one.
                 </span>

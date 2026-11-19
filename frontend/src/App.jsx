@@ -4,6 +4,7 @@ import Layout from './Components/Layout.jsx';
 import Home from './Pages/Home.jsx';
 import Products from './Pages/Products.jsx';
 import About from './Pages/About.jsx';
+import Contact from './Pages/Contact.jsx';
 import QuoteModal from './Components/QuoteModal.jsx';
 import AdminRoute from './Components/AdminRoute.jsx';
 import AdminDashboard from './Pages/AdminDashboard.jsx';
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/services" element={<Products setSelectedProduct={setSelectedProduct} />} />
           <Route path="/products" element={<Navigate to="/services" replace />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/bulk-order" element={<BulkOrder />} />
           <Route 
             path="/admin-dashboard" 
