@@ -128,7 +128,8 @@ const Products = () => {
         { name: "FBB (Folding Box Board) Box", category: "Packaging", image: "/images/Packaging/FBB Boxes.jpg", description: "High-grade virgin fiber paperboard ideal for pharmaceuticals, cosmetics, FMCG, and luxury retail folding cartons." },
         { name: "Rigid Box", category: "Packaging", image: "/images/Packaging/rigid_boxes.jpg", description: "Heavy-duty structural chipboard wrapped in custom printed art paper for luxury branding, gifts, and electronics." },
         { name: "Paper Bags", category: "Retail", image: "/images/paper_bags.jpg" },
-        { name: "Bar code Sticker Rolls", category: "Stationery", image: "/images/barcode_sr.jpg", description: "Precision thermal barcode labels and custom self-adhesive sticker rolls matching industrial scanning grids." },
+        { name: "Barcode Sticker Rolls", category: "Others", image: "/images/barcode_sr.jpg", description: "Precision thermal barcode labels and custom self-adhesive sticker rolls matching industrial scanning grids." },
+        { name: "Stickers", category: "Others", image: "/images/stickers.jpg", description: "High-grade custom adhesive stickers, product labels, die-cut decals, and promotional stickers." },
         { name: "Sign Boards", category: "Boards", image: "/images/Boards/sign_b.jpg", description: "Durable high-impact acrylic, ACP, LED, and metal sign boards for storefronts, directional guidance, and brand displays." },
         { name: "Flex Banner", category: "Boards", image: "/images/Boards/flex_b.jpg", description: "High-contrast weatherproof flex vinyl banners for large-scale outdoor advertising, exhibitions, and promotional backdrops." },
         { name: "Standee", category: "Boards", image: "/images/Boards/standee.jpg", description: "Lightweight, portable roll-up aluminum standees designed for trade fairs, retail showrooms, conferences, and event branding." },
@@ -179,51 +180,51 @@ const Products = () => {
     return (
         <div className="min-h-screen bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 relative w-full overflow-x-hidden transition-colors duration-300">
             
-            {/* 1. Our Services Hero Section - Image Underlapping Text */}
-            <div className="relative w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
-                <div className="relative w-full max-w-7xl mx-auto min-h-[420px] sm:min-h-[480px] md:min-h-[520px] rounded-[2rem] overflow-hidden shadow-xl bg-amber-950 border border-amber-900/60 dark:bg-stone-900 dark:border dark:border-stone-700 dark:shadow-[0_15px_45px_rgba(0,0,0,0.6)] dark:ring-1 dark:ring-stone-600/40 flex flex-col justify-end">
-                    
-                    {/* Underlapping Image / Placeholder Layer */}
-                    <div className="absolute inset-0 z-0 bg-amber-950 dark:bg-stone-900">
-                        {heroImage ? (
-                            <img 
-                                src={heroImage} 
-                                alt="Komori Lithrone 4-Colour Offset Machine" 
-                                className="w-full h-full object-cover object-center"
-                                onError={(e) => {
-                                    if (!e.currentTarget.src.includes('/machines/')) {
-                                        e.currentTarget.src = '/machines/lithrone_4_color.jpg';
-                                    } else {
-                                        e.currentTarget.style.display = 'none';
-                                    }
-                                }}
-                            />
-                        ) : (
-                            <div className="w-full h-full border-2 border-dashed border-white/20 dark:border-stone-600/80 flex flex-col items-center justify-center p-6 text-center bg-amber-900/30 dark:bg-[#1a1715]/90">
-                                <div className="flex flex-col items-center justify-center text-amber-200/60 dark:text-stone-300 pointer-events-none">
-                                    <svg className="w-14 h-14 mb-3 stroke-[1.5] dark:text-stone-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                    </svg>
-                                    <span className="text-sm font-extrabold uppercase tracking-wider text-white/90 dark:text-white">Hero Underlap Image Space</span>
-                                    <span className="text-xs text-amber-200/70 dark:text-stone-300 mt-1 font-medium">Image will underlap the text content here</span>
-                                </div>
+            {/* 1. Our Services Hero Section - Image End-to-End of Screen */}
+            <div className="relative w-full overflow-hidden min-h-[420px] sm:min-h-[480px] md:min-h-[520px] bg-amber-900 dark:bg-stone-900 border-b border-amber-900/40 dark:border-stone-800 flex flex-col justify-end">
+                
+                {/* Underlapping Image / Placeholder Layer (End-to-End) */}
+                <div className="absolute inset-0 z-0 bg-amber-900 dark:bg-stone-900">
+                    {heroImage ? (
+                        <img 
+                            src={heroImage} 
+                            alt="Komori Lithrone 4-Colour Offset Machine" 
+                            className="w-full h-full object-cover object-center transform scale-105"
+                            onError={(e) => {
+                                if (!e.currentTarget.src.includes('/machines/')) {
+                                    e.currentTarget.src = '/machines/lithrone_4_color.jpg';
+                                } else {
+                                    e.currentTarget.style.display = 'none';
+                                }
+                            }}
+                        />
+                    ) : (
+                        <div className="w-full h-full border-2 border-dashed border-white/20 dark:border-stone-600/80 flex flex-col items-center justify-center p-6 text-center bg-amber-900/30 dark:bg-[#1a1715]/90">
+                            <div className="flex flex-col items-center justify-center text-amber-200/60 dark:text-stone-300 pointer-events-none">
+                                <svg className="w-14 h-14 mb-3 stroke-[1.5] dark:text-stone-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                </svg>
+                                <span className="text-sm font-extrabold uppercase tracking-wider text-white/90 dark:text-white">Hero Underlap Image Space</span>
+                                <span className="text-xs text-amber-200/70 dark:text-stone-300 mt-1 font-medium">Image will underlap the text content here</span>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
+                </div>
 
-                    {/* Gradient Overlay for Text Readability & Contrast */}
-                    <div 
-                        className="absolute inset-0 z-10 bg-gradient-to-t from-amber-950 via-amber-950/80 to-amber-950/20 dark:from-stone-950/95 dark:via-stone-950/50 dark:to-transparent pointer-events-none" 
-                        aria-hidden="true"
-                    />
-                    <div 
-                        className="absolute inset-0 z-10 bg-gradient-to-r from-amber-950/90 via-amber-950/60 to-transparent dark:from-stone-950/85 dark:via-stone-950/40 dark:to-transparent hidden sm:block pointer-events-none" 
-                        aria-hidden="true"
-                    />
+                {/* Gradient Overlay for Text Readability & Contrast */}
+                <div 
+                    className="absolute inset-0 z-10 bg-gradient-to-t from-amber-900/80 via-amber-900/45 to-transparent dark:from-stone-900/85 dark:via-stone-900/40 dark:to-transparent pointer-events-none" 
+                    aria-hidden="true"
+                />
+                <div 
+                    className="absolute inset-0 z-10 bg-gradient-to-r from-amber-900/75 via-amber-900/30 to-transparent dark:from-stone-900/70 dark:via-stone-900/25 dark:to-transparent hidden sm:block pointer-events-none" 
+                    aria-hidden="true"
+                />
 
-                    {/* Text Above Image (Layered On Top) */}
-                    <div className="relative z-20 p-6 sm:p-10 md:p-14 lg:p-16 max-w-4xl text-left">
-                        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4 shadow-sm
+                {/* Text Above Image (Layered On Top, Aligned to Grid) */}
+                <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 md:py-16 text-left">
+                    <div className="max-w-3xl">
+                        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-5 shadow-sm
                                         bg-white/10 text-white border border-white/20 backdrop-blur-md dark:bg-stone-800/95 dark:border-stone-600 dark:text-stone-100">
                             <span className="h-2 w-2 rounded-full bg-amber-400 dark:bg-[#d4a373] animate-pulse"></span>
                             <span>COMMERCIAL &amp; INDUSTRIAL PRINTING</span>
@@ -235,13 +236,13 @@ const Products = () => {
                             Making your business undeniably good on paper. Discover our capabilities in commercial offset printing, premium rigid packaging, corporate stationery, and much more.
                         </p>
                     </div>
-
                 </div>
+
             </div>
 
             <div className="max-w-7xl mx-auto py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
-                {/* Category Filter Tabs - Dark Stone in Dark Mode */}
-                <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10 sm:mb-12">
+                {/* Category Filter Tabs - Pill Dock */}
+                <div className="flex flex-wrap items-center justify-center gap-2 p-2 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-sm max-w-fit mx-auto mb-12">
                     {categories.map((cat) => {
                         const isActive = activeCategory === cat.id;
                         return (
@@ -250,8 +251,8 @@ const Products = () => {
                                 onClick={() => setActiveCategory(cat.id)}
                                 className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
                                     isActive
-                                        ? 'bg-amber-950 text-white shadow-md scale-105 border border-amber-900 ring-2 ring-amber-500/40 dark:bg-stone-800 dark:border-stone-700 dark:text-[#d4a373] dark:ring-stone-600/40'
-                                        : 'bg-white text-stone-700 hover:text-amber-950 hover:bg-amber-50/70 border border-stone-200 hover:border-amber-300 dark:bg-stone-900 dark:text-stone-300 dark:hover:text-stone-100 dark:hover:bg-stone-800 dark:border-stone-800'
+                                        ? 'bg-amber-950 text-white shadow-sm dark:bg-stone-800 dark:text-[#d4a373]'
+                                        : 'text-stone-700 hover:text-amber-950 hover:bg-amber-50/70 dark:text-stone-300 dark:hover:text-[#d4a373] dark:hover:bg-stone-800/70'
                                 }`}
                             >
                                 {cat.label}
@@ -261,19 +262,19 @@ const Products = () => {
                 </div>
 
                 {/* Responsive Service Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8">
                     {displayedProducts.map((product, index) => (
                         <div 
                             key={index} 
                             onClick={() => handleServiceClick(product.name)}
-                            className="group bg-white dark:bg-stone-900 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col border border-amber-950/10 dark:border-stone-800 hover:border-amber-900/50 dark:hover:border-stone-600 overflow-hidden hover:-translate-y-1 cursor-pointer"
+                            className="group bg-white dark:bg-stone-900 rounded-3xl p-3 shadow-[0_8px_28px_-10px_rgba(69,26,3,0.06)] hover:shadow-[0_20px_44px_-12px_rgba(69,26,3,0.16)] transition-all duration-300 flex flex-col border border-stone-200/80 dark:border-stone-800 hover:border-amber-900/50 dark:hover:border-[#d4a373]/50 overflow-hidden hover:-translate-y-1.5 cursor-pointer"
                         >
                             {/* Service Image Card */}
-                            <div className="h-44 sm:h-48 lg:h-52 w-full bg-amber-50/30 dark:bg-stone-950 overflow-hidden flex items-center justify-center relative">
+                            <div className="h-48 sm:h-52 w-full rounded-2xl bg-stone-100 dark:bg-stone-950 overflow-hidden flex items-center justify-center relative">
                                 <img 
                                     src={product.image || "https://via.placeholder.com/400x300?text=J.N.+Enterprise"} 
                                     alt={product.name}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                                     onError={(e) => {
                                         e.currentTarget.onerror = null;
                                         e.currentTarget.src = `https://via.placeholder.com/400x300?text=${encodeURIComponent(product.name)}`;
@@ -282,7 +283,7 @@ const Products = () => {
                             </div>
 
                             {/* Service Content Name */}
-                            <div className="p-4 sm:p-5 flex-1 flex flex-col justify-center text-center">
+                            <div className="px-3 pt-4 pb-2.5 flex-1 flex flex-col justify-center text-center">
                                 <h3 className="text-base sm:text-lg font-bold text-amber-950 dark:text-stone-100 group-hover:text-amber-800 dark:group-hover:text-[#d4a373] transition-colors">
                                     {product.name.includes(" (") && product.name.startsWith("Office Stationery") ? (
                                         <>
@@ -313,16 +314,30 @@ const Products = () => {
                     ))}
                 </div>
 
-                {/* Bottom Call-to-Action - Deep Amber in Light, Dark Stone in Dark Mode */}
-                <div className="mt-16 sm:mt-20 bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 dark:from-stone-900 dark:via-stone-900 dark:to-stone-900 text-white dark:text-stone-100 rounded-3xl p-8 sm:p-12 shadow-xl border border-amber-900/60 dark:border-stone-800 text-left relative overflow-hidden">
+                {/* Bottom Call-to-Action - Warm Lighter Amber in Light, Refined Stone in Dark Mode */}
+                <div className="mt-16 sm:mt-20 bg-gradient-to-br from-amber-900 via-amber-800 to-amber-900 dark:from-stone-800 dark:via-stone-800/95 dark:to-stone-900 text-white dark:text-stone-100 rounded-[2rem] p-8 sm:p-12 shadow-[0_20px_50px_-15px_rgba(69,26,3,0.25)] border border-amber-700/60 dark:border-stone-700 text-left relative overflow-hidden">
+                    
+                    {/* Water-faded packaging_1 background watermark */}
+                    <div 
+                        className="absolute inset-0 pointer-events-none select-none overflow-hidden" 
+                        aria-hidden="true"
+                    >
+                        <img 
+                            src="/images/packaging_1.jpg" 
+                            alt="" 
+                            className="w-full h-full object-cover object-right sm:object-center opacity-25 dark:opacity-15"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/85 via-amber-900/60 to-amber-900/15 dark:from-stone-800/85 dark:via-stone-800/60 dark:to-stone-800/15" />
+                    </div>
+
                     <div className="max-w-2xl relative z-10">
-                        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 bg-white/10 text-white border border-white/20 dark:bg-stone-800 dark:border-stone-700 dark:text-stone-300">
+                        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 bg-white/10 text-white border border-white/20 backdrop-blur-sm dark:bg-stone-800 dark:border-stone-700 dark:text-stone-300">
                             <span>Ready to Print</span>
                         </div>
                         <h2 className="text-2xl sm:text-3xl font-black mb-3 text-white dark:text-stone-100">
                             Looking for Custom Packaging or Commercial Printing?
                         </h2>
-                        <p className="text-white/90 dark:text-stone-300 text-sm sm:text-base mb-6 leading-relaxed">
+                        <p className="text-white/90 dark:text-stone-300 text-sm sm:text-base mb-7 leading-relaxed">
                             Connect directly with us for quality printing, and on-time delivery.
                         </p>
                         <Link
@@ -331,7 +346,7 @@ const Products = () => {
                                        bg-amber-950 hover:bg-amber-900 text-white border border-amber-800/80 shadow-amber-950/40
                                        dark:bg-stone-800 dark:hover:bg-stone-700 dark:text-[#d4a373] dark:border dark:border-stone-700 dark:shadow-black/40"
                         >
-                            <span className="inline-flex items-center space-x-2.5 transition-transform duration-300 group-hover:scale-110 origin-center">
+                            <span className="inline-flex items-center space-x-2.5 transition-transform duration-300 group-hover:scale-105 origin-center">
                                 <span>ORDER</span>
                                 <svg 
                                     className="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-2" 

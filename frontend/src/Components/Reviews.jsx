@@ -33,12 +33,12 @@ const REVIEWS = [
 
 export default function Reviews() {
   return (
-    <section className="py-14 md:py-20 bg-stone-50 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-colors">
+    <section className="py-16 md:py-24 bg-stone-50 dark:bg-stone-950 border-b border-stone-200/80 dark:border-stone-800/80 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Row */}
-        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4 shadow-xs
+        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-14">
+          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-5 shadow-xs
                           bg-amber-950 text-white border border-amber-900
                           dark:bg-stone-800 dark:text-[#d4a373] dark:border-stone-700">
             <span className="h-2 w-2 rounded-full bg-amber-400"></span>
@@ -50,22 +50,22 @@ export default function Reviews() {
         </div>
 
         {/* Reviews Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-14">
           {REVIEWS.map((review, index) => (
             <div 
               key={index} 
-              className="group bg-white dark:bg-stone-950 rounded-2xl p-6 sm:p-7 border border-stone-200 dark:border-stone-800 hover:border-amber-900/50 dark:hover:border-[#d4a373]/50 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 relative"
+              className="group bg-white dark:bg-stone-900 rounded-3xl p-7 sm:p-8 border border-stone-200/80 dark:border-stone-800 hover:border-amber-900/40 dark:hover:border-[#d4a373]/50 shadow-[0_10px_35px_-15px_rgba(69,26,3,0.07)] hover:shadow-[0_22px_48px_-12px_rgba(69,26,3,0.15)] transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 relative overflow-hidden"
             >
               {/* Quote Watermark Icon */}
-              <div className="absolute top-5 right-5 text-stone-200 dark:text-stone-800 group-hover:text-amber-200/50 dark:group-hover:text-amber-900/30 transition-colors pointer-events-none">
+              <div className="absolute top-5 right-5 text-stone-200/80 dark:text-stone-800 group-hover:text-amber-200/60 dark:group-hover:text-amber-900/30 transition-colors pointer-events-none">
                 <MdFormatQuote className="text-5xl" />
               </div>
 
               <div>
                 {/* Star Rating */}
-                <div className="flex items-center gap-1 text-amber-600 dark:text-[#d4a373] mb-4 relative z-10">
+                <div className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-stone-800/80 border border-amber-200/60 dark:border-stone-700/80 text-amber-600 dark:text-[#d4a373] mb-5 relative z-10 w-fit">
                   {[...Array(review.rating)].map((_, i) => (
-                    <MdStar key={i} className="text-lg" />
+                    <MdStar key={i} className="text-base" />
                   ))}
                 </div>
 
@@ -76,7 +76,7 @@ export default function Reviews() {
               </div>
 
               {/* Author & Verification Card Footer */}
-              <div className="pt-4 border-t border-stone-100 dark:border-stone-800/80 relative z-10">
+              <div className="mt-2 pt-5 border-t border-stone-100 dark:border-stone-800/80 relative z-10">
                 <div className="flex items-center justify-between mb-1">
                   <h4 className="font-bold text-sm sm:text-base text-amber-950 dark:text-stone-100 group-hover:text-amber-800 dark:group-hover:text-[#d4a373] transition-colors">
                     {review.name}
@@ -89,7 +89,7 @@ export default function Reviews() {
                 <p className="text-xs text-stone-500 dark:text-stone-400">
                   {review.designation}, <span className="font-medium text-stone-700 dark:text-stone-300">{review.company}</span>
                 </p>
-                <div className="mt-2 text-[11px] font-medium text-stone-600 dark:text-stone-400">
+                <div className="mt-2.5 text-[11px] font-medium text-stone-600 dark:text-stone-400">
                   📦 Scope: {review.projectScope}
                 </div>
               </div>
@@ -99,21 +99,21 @@ export default function Reviews() {
         </div>
 
         {/* Trust Metric Stats Bar */}
-        <div className="rounded-2xl p-6 sm:p-8 bg-amber-950 dark:bg-stone-950 text-white shadow-lg border border-amber-900/60 dark:border-stone-800 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div>
-            <div className="text-2xl sm:text-3xl font-black text-white mb-1">4.9 / 5.0</div>
+        <div className="rounded-3xl p-8 sm:p-10 bg-gradient-to-br from-amber-950 via-amber-900 to-amber-950 dark:from-stone-900 dark:via-stone-900 dark:to-stone-950 text-white shadow-[0_20px_50px_-15px_rgba(69,26,3,0.35)] border border-amber-800/60 dark:border-stone-800 grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:divide-x md:divide-amber-800/40 dark:md:divide-stone-800">
+          <div className="md:px-4">
+            <div className="text-2xl sm:text-3xl font-black text-white mb-1.5">4.9 / 5.0</div>
             <div className="text-xs sm:text-sm text-amber-200/90 dark:text-[#d4a373] font-medium">Average Client Rating</div>
           </div>
-          <div>
-            <div className="text-2xl sm:text-3xl font-black text-white mb-1">150+</div>
+          <div className="md:px-4">
+            <div className="text-2xl sm:text-3xl font-black text-white mb-1.5">150+</div>
             <div className="text-xs sm:text-sm text-amber-200/90 dark:text-[#d4a373] font-medium">Enterprise Clients</div>
           </div>
-          <div>
-            <div className="text-2xl sm:text-3xl font-black text-white mb-1">99.2%</div>
+          <div className="md:px-4">
+            <div className="text-2xl sm:text-3xl font-black text-white mb-1.5">99.2%</div>
             <div className="text-xs sm:text-sm text-amber-200/90 dark:text-[#d4a373] font-medium">On-Time Bulk Dispatch</div>
           </div>
-          <div>
-            <div className="text-2xl sm:text-3xl font-black text-white mb-1">25+ Yrs</div>
+          <div className="md:px-4">
+            <div className="text-2xl sm:text-3xl font-black text-white mb-1.5">25+ Yrs</div>
             <div className="text-xs sm:text-sm text-amber-200/90 dark:text-[#d4a373] font-medium">Press Excellence (Est. 1998)</div>
           </div>
         </div>

@@ -145,8 +145,8 @@ export default function BulkOrder() {
                         type="submit" 
                         disabled={submitStatus === 'Sending to Admin...'}
                         className="w-full font-black text-sm uppercase tracking-widest py-4 rounded-xl shadow-lg transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed
-                                   bg-amber-950 hover:bg-amber-900 text-white border border-amber-950/20
-                                   dark:bg-[#c58f5e] dark:hover:bg-[#b88050] dark:text-black dark:border-[#c58f5e] dark:shadow-[0_0_20px_rgba(212,163,115,0.3)]"
+                                   bg-amber-200 hover:bg-amber-300 text-amber-950
+                                   dark:bg-amber-200 dark:hover:bg-amber-300 dark:text-stone-950"
                     >
                         {submitStatus === 'Sending to Admin...' ? 'Processing...' : 'Submit Inquiry'}
                     </button>

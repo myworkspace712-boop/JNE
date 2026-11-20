@@ -106,41 +106,75 @@ export default function Contact() {
     return (
         <div className="min-h-screen bg-stone-50 dark:bg-stone-950 text-stone-800 dark:text-stone-100 transition-colors">
             
-            {/* Contact Us Hero Section - Amber 950 in Light, Dark Stone in Dark Mode */}
-            <div className="bg-amber-950 dark:bg-stone-900 border-b border-amber-900 dark:border-stone-800 py-16 sm:py-24 px-4 sm:px-6 lg:px-8 text-center transition-colors shadow-sm">
-                <div className="max-w-3xl mx-auto">
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-white dark:text-stone-100 tracking-tight mb-4">
-                        Contact Us
-                    </h1>
-                    <p className="text-lg sm:text-xl text-amber-100 dark:text-stone-300 leading-relaxed">
-                        Get in touch with our team for general business inquiries, vendor partnerships, or to schedule a visit to our facility.
-                    </p>
+            {/* Contact Us Hero Section - Image End-to-End of Screen */}
+            <section className="relative w-full overflow-hidden min-h-[360px] sm:min-h-[420px] bg-amber-900 dark:bg-stone-900 border-b border-amber-900/40 dark:border-stone-800 flex items-center justify-start py-14 sm:py-20 text-left transition-colors">
+                
+                {/* Background Layer: Contact Image (End-to-End of Screen) */}
+                <div className="absolute inset-0 z-0 bg-amber-900 dark:bg-stone-900">
+                    <img 
+                        src="/images/contact.jpg" 
+                        alt="Contact J.N. Enterprise" 
+                        className="w-full h-full object-cover object-center transform scale-105"
+                        onError={(e) => {
+                            if (!e.currentTarget.src.includes('4_colour')) {
+                                e.currentTarget.src = '/machines/4_colour.jpg';
+                            } else {
+                                e.currentTarget.style.display = 'none';
+                            }
+                        }}
+                    />
                 </div>
-            </div>
 
-            <div className="max-w-7xl mx-auto py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+                {/* Gradient Overlay for Text Contrast & Brand Theme - Lightened Shading */}
+                <div 
+                    className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-amber-900/75 via-amber-900/40 to-transparent dark:from-stone-900/80 dark:via-stone-900/35 dark:to-transparent" 
+                    aria-hidden="true"
+                />
+                <div 
+                    className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-amber-900/70 via-amber-900/25 to-transparent dark:from-stone-900/65 dark:via-stone-900/20 dark:to-transparent" 
+                    aria-hidden="true"
+                />
+
+                {/* Hero Content - Placed on the left side, aligned to 7xl page grid */}
+                <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+                    <div className="max-w-2xl text-left">
+                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white border border-white/20 text-xs sm:text-sm font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6 shadow-xs">
+                            <span className="h-2 w-2 rounded-full bg-amber-400 dark:bg-[#d4a373] animate-pulse"></span>
+                            <span>GET IN TOUCH</span>
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white dark:text-stone-100 tracking-tight mb-4 drop-shadow-md">
+                            Contact Us
+                        </h1>
+                        <p className="text-base sm:text-lg md:text-xl text-amber-100 dark:text-stone-200 leading-relaxed font-medium drop-shadow-sm">
+                            Get in touch with our team for general business inquiries, vendor partnerships, or to schedule a visit to our facility.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <div className="max-w-7xl mx-auto py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
 
                 {/* 2. Contact Information Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-16">
                     {contactDetails.map((item, idx) => {
                         const Icon = item.icon;
                         return (
                             <div 
                                 key={idx}
-                                className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 p-6 shadow-sm hover:shadow-lg hover:border-amber-900/50 dark:hover:border-[#d4a373]/50 transition-all duration-300 flex flex-col justify-between"
+                                className="group bg-white dark:bg-stone-900 rounded-3xl border border-stone-200/80 dark:border-stone-800 p-7 sm:p-8 shadow-[0_10px_35px_-15px_rgba(69,26,3,0.07)] hover:shadow-[0_20px_45px_-12px_rgba(69,26,3,0.15)] hover:border-amber-900/50 dark:hover:border-[#d4a373]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                             >
                                 <div>
-                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-2xl transition-colors ${item.iconBg}`}>
+                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 text-2xl transition-transform duration-300 group-hover:scale-105 shadow-xs ${item.iconBg}`}>
                                         <Icon />
                                     </div>
-                                    <h2 className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-[#d4a373] mb-1">
+                                    <h2 className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-[#d4a373] mb-1.5">
                                         {item.title}
                                     </h2>
                                     <p className="text-base font-bold text-stone-800 dark:text-stone-100 leading-snug">
                                         {item.detail}
                                     </p>
                                     {item.subdetail && (
-                                        <p className="text-xs text-stone-600 dark:text-stone-400 mt-1">
+                                        <p className="text-xs text-stone-600 dark:text-stone-400 mt-1.5">
                                             {item.subdetail}
                                         </p>
                                     )}
@@ -150,7 +184,7 @@ export default function Contact() {
                                         href={item.actionUrl} 
                                         target={item.actionUrl.startsWith('http') ? '_blank' : '_self'} 
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center space-x-1.5 text-xs font-black uppercase tracking-wider mt-4 transition-colors
+                                        className="inline-flex items-center space-x-1.5 text-xs font-black uppercase tracking-wider mt-5 transition-colors
                                                    text-amber-950 hover:text-amber-800 dark:text-[#d4a373] dark:hover:text-white"
                                     >
                                         <span>{item.actionText}</span>
@@ -165,8 +199,8 @@ export default function Contact() {
                 {/* 3. The "Your Order" Card / Custom Inquiry Form */}
                 <div 
                     id="your-order-card" 
-                    className="max-w-4xl mx-auto rounded-[2.5rem] shadow-xl border overflow-hidden scroll-mt-24 transition-colors
-                               bg-white border-stone-200 text-stone-800
+                    className="max-w-4xl mx-auto rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(69,26,3,0.12)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border overflow-hidden scroll-mt-24 transition-colors
+                               bg-white border-stone-200/90 text-stone-800
                                dark:bg-stone-900 dark:border-stone-800 dark:text-stone-100"
                 >
                     {/* Entire line from end-to-end of that section */}
@@ -186,9 +220,9 @@ export default function Contact() {
                                 <select 
                                     name="Requested_Product" 
                                     required
-                                    className="w-full border rounded-xl px-4 py-3.5 outline-none transition-colors
-                                               border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 focus:ring-2 focus:ring-amber-950/10 text-stone-900
-                                               dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-2 dark:focus:ring-[#d4a373]/10 dark:text-stone-100" 
+                                    className="w-full border rounded-2xl px-4 py-3.5 outline-none transition-all
+                                               border-stone-300 bg-stone-50/80 focus:bg-white focus:border-amber-950 focus:ring-4 focus:ring-amber-950/10 text-stone-900
+                                               dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-4 dark:focus:ring-[#d4a373]/15 dark:text-stone-100" 
                                     value={selectedProductForm}
                                     onChange={(e) => setSelectedProductForm(e.target.value)}
                                 >
@@ -236,9 +270,9 @@ export default function Contact() {
                                     name="Target_Quantity"
                                     required
                                     placeholder="e.g. 1,000 units" 
-                                    className="w-full border rounded-xl px-4 py-3.5 outline-none transition-colors
-                                               border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 focus:ring-2 focus:ring-amber-950/10 text-stone-900
-                                               dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-2 dark:focus:ring-[#d4a373]/10 dark:text-stone-100" 
+                                    className="w-full border rounded-2xl px-4 py-3.5 outline-none transition-all
+                                               border-stone-300 bg-stone-50/80 focus:bg-white focus:border-amber-950 focus:ring-4 focus:ring-amber-950/10 text-stone-900
+                                               dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-4 dark:focus:ring-[#d4a373]/15 dark:text-stone-100" 
                                 />
                             </div>
                         </div>
@@ -253,9 +287,9 @@ export default function Contact() {
                                     name="Client_Email"
                                     required
                                     placeholder="company@domain.com" 
-                                    className="w-full border rounded-xl px-4 py-3.5 outline-none transition-colors
-                                               border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 focus:ring-2 focus:ring-amber-950/10 text-stone-900
-                                               dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-2 dark:focus:ring-[#d4a373]/10 dark:text-stone-100" 
+                                    className="w-full border rounded-2xl px-4 py-3.5 outline-none transition-all
+                                               border-stone-300 bg-stone-50/80 focus:bg-white focus:border-amber-950 focus:ring-4 focus:ring-amber-950/10 text-stone-900
+                                               dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-4 dark:focus:ring-[#d4a373]/15 dark:text-stone-100" 
                                 />
                             </div>
                             <div>
@@ -267,9 +301,9 @@ export default function Contact() {
                                     name="Delivery_Destination"
                                     required
                                     placeholder="City or Port" 
-                                    className="w-full border rounded-xl px-4 py-3.5 outline-none transition-colors
-                                               border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 focus:ring-2 focus:ring-amber-950/10 text-stone-900
-                                               dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-2 dark:focus:ring-[#d4a373]/10 dark:text-stone-100" 
+                                    className="w-full border rounded-2xl px-4 py-3.5 outline-none transition-all
+                                               border-stone-300 bg-stone-50/80 focus:bg-white focus:border-amber-950 focus:ring-4 focus:ring-amber-950/10 text-stone-900
+                                               dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-4 dark:focus:ring-[#d4a373]/15 dark:text-stone-100" 
                                 />
                             </div>
                         </div>
@@ -282,24 +316,24 @@ export default function Contact() {
                                 rows="4" 
                                 name="Additional_Specifications"
                                 placeholder="Paper GSM, surface lamination, dimensions, or custom box finish requirements..." 
-                                className="w-full border rounded-xl px-4 py-3.5 outline-none resize-none transition-colors
-                                           border-stone-300 bg-stone-50 focus:bg-white focus:border-amber-950 focus:ring-2 focus:ring-amber-950/10 text-stone-900
-                                           dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-2 dark:focus:ring-[#d4a373]/10 dark:text-stone-100"
+                                className="w-full border rounded-2xl px-4 py-3.5 outline-none resize-none transition-all
+                                           border-stone-300 bg-stone-50/80 focus:bg-white focus:border-amber-950 focus:ring-4 focus:ring-amber-950/10 text-stone-900
+                                           dark:border-stone-800 dark:bg-stone-950 dark:focus:bg-black dark:focus:border-[#d4a373] dark:focus:ring-4 dark:focus:ring-[#d4a373]/15 dark:text-stone-100"
                             ></textarea>
                         </div>
 
                         <button 
                             type="submit" 
                             disabled={isSubmitting}
-                            className="w-full font-black text-sm uppercase tracking-widest py-4 rounded-xl shadow-lg transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center
-                                       bg-[#d4a373] hover:bg-[#c58f5e] text-amber-950 shadow-black/20 hover:shadow-black/30
-                                       dark:bg-[#d4a373] dark:hover:bg-[#c58f5e] dark:text-stone-950"
+                            className="w-full font-black text-sm uppercase tracking-widest py-4 rounded-2xl shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center
+                                       bg-gradient-to-b from-amber-50/70 via-stone-50 to-stone-50 hover:from-amber-100/80 hover:via-stone-100 hover:to-stone-100 text-amber-950 border border-stone-200/80 shadow-amber-950/5
+                                       dark:from-stone-900/60 dark:via-stone-950 dark:to-stone-950 dark:hover:from-stone-800 dark:hover:via-stone-900 dark:hover:to-stone-900 dark:text-[#d4a373] dark:border-stone-800/80"
                         >
                             <span>{isSubmitting ? 'Submitting...' : 'Submit'}</span>
                         </button>
 
                         {submitStatus && (
-                            <div className="p-4 rounded-xl text-center text-sm font-bold animate-fade-in flex items-center justify-center space-x-2
+                            <div className="p-4 rounded-2xl text-center text-sm font-bold animate-fade-in flex items-center justify-center space-x-2
                                             bg-amber-50 text-amber-950 border border-amber-200
                                             dark:bg-stone-950 dark:text-[#d4a373] dark:border-stone-800">
                                 <MdCheckCircle className="text-lg text-amber-700 dark:text-[#d4a373]" />
