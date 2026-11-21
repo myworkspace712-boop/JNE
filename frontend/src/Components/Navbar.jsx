@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MdLightMode, MdDarkMode, MdClose } from 'react-icons/md';
+import { MdClose } from 'react-icons/md';
 import { CiMenuBurger } from 'react-icons/ci';
 import { useTheme } from './ThemeContext.jsx';
 
@@ -25,26 +25,28 @@ export default function Navbar() {
     <>
       {/* 1. Base Header */}
       <header className="w-full bg-white/85 dark:bg-stone-950/85 backdrop-blur-xl border-b border-stone-200/80 dark:border-stone-800/80 sticky top-0 z-50 transition-all duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 min-h-[84px] flex items-center justify-between">
+        <div className="relative max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-2.5 sm:py-3 min-h-[68px] sm:min-h-[76px] flex items-center justify-between gap-2 sm:gap-4 w-full">
 
           {/* 2. Logo Area (Left) */}
-          <Link to="/" className="flex items-center cursor-pointer group z-10 shrink-0">
-            <img 
-              src="/images/logo_transparent.png" 
-              alt="JN Enterprise Logo" 
-              className="h-8 sm:h-10 md:h-11 w-auto max-w-[170px] sm:max-w-[220px] md:max-w-none object-contain transition-transform duration-300 group-hover:scale-105"
-            />
-          </Link>
+          <div className="flex items-center justify-start shrink-0">
+            <Link to="/" className="flex items-center cursor-pointer group">
+              <img 
+                src="/images/logo_transparent.png" 
+                alt="JN Enterprise Logo" 
+                className="h-6.5 sm:h-7.5 md:h-8 lg:h-9 w-auto max-w-[130px] sm:max-w-[160px] md:max-w-[190px] lg:max-w-[210px] object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </Link>
+          </div>
 
-          {/* 3. Navigation Links (Showcase after md size with underline from left) */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-10 z-10">
+          {/* 3. Navigation Links (Center - fluid flex-1 with clean spacing) */}
+          <nav className="hidden md:flex items-center justify-center gap-3 lg:gap-6 xl:gap-8 flex-1 mx-2 lg:mx-4 z-10">
             {navLinks.map((page) => {
               const isActive = location.pathname === page.path;
               return (
                 <Link
                   key={page.name}
                   to={page.path}
-                  className={`relative py-2 text-sm lg:text-base font-bold tracking-wide uppercase transition-all duration-300 whitespace-nowrap
+                  className={`relative px-1.5 lg:px-2.5 py-1.5 text-xs lg:text-sm font-bold tracking-wider uppercase transition-all duration-300 whitespace-nowrap flex items-center
                     ${isActive
                       ? 'text-amber-950 dark:text-[#d4a373]'
                       : 'text-amber-950/80 hover:text-amber-950 dark:text-stone-300 dark:hover:text-[#d4a373]'}
@@ -60,19 +62,36 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* 4. Action Buttons (Right) */}
-          <div className="relative flex items-center space-x-3 z-20 shrink-0">
-            {/* Theme Toggle Button */}
+          {/* 4. Action Buttons (Right - guaranteed to stay within navbar bounds) */}
+          <div className="flex items-center justify-end gap-2 sm:gap-3 shrink-0 z-20">
+            {/* Theme Toggle Switch with "THEME" Label */}
             <button
               type="button"
+              role="switch"
+              aria-checked={dark}
+              aria-label="Toggle light and dark theme"
               onClick={(e) => {
                 e.currentTarget.blur();
                 setDark(!dark);
               }}
-              className="w-11 h-11 flex items-center justify-center rounded-full bg-amber-950 text-white hover:bg-amber-900 border border-amber-950/20 dark:bg-stone-900 dark:text-[#d4a373] dark:hover:bg-amber-950 dark:border-stone-800 transition-all duration-300 cursor-pointer shadow-sm active:scale-95"
-              aria-label="Toggle theme"
+              className="group flex items-center gap-1.5 sm:gap-2 cursor-pointer select-none focus:outline-hidden active:scale-95"
             >
-              {dark ? <MdLightMode className="w-5 h-5" /> : <MdDarkMode className="w-5 h-5" />}
+              <span className="text-[11px] sm:text-xs font-bold tracking-wider uppercase text-amber-950/80 group-hover:text-amber-950 dark:text-stone-300 dark:group-hover:text-[#d4a373] transition-colors">
+                THEME
+              </span>
+              <span
+                className={`relative inline-flex h-6.5 w-11 sm:h-7 sm:w-12 shrink-0 items-center rounded-full p-0.5 sm:p-1 transition-colors duration-300 border shadow-inner
+                  ${dark
+                    ? 'bg-stone-800 border-stone-700'
+                    : 'bg-stone-200/90 border-stone-300/80'}`}
+              >
+                <span
+                  className={`inline-block h-5 w-5 rounded-full shadow-md transition-transform duration-300 ease-out
+                    ${dark
+                      ? 'translate-x-5 bg-[#d4a373]'
+                      : 'translate-x-0 bg-amber-950'}`}
+                />
+              </span>
             </button>
 
             {/* Mobile Sidebar Hamburger Button */}
@@ -82,10 +101,10 @@ export default function Navbar() {
                 e.currentTarget.blur();
                 setTimeout(() => setDrawerOpen(true), 150);
               }}
-              className="flex md:hidden w-11 h-11 items-center justify-center rounded-full bg-amber-950 text-white hover:bg-amber-900 border border-amber-950/20 dark:bg-stone-900 dark:text-[#d4a373] dark:hover:bg-amber-950 dark:border-stone-800 transition-all duration-300 cursor-pointer shadow-sm active:scale-95"
+              className="flex md:hidden h-8 w-8 sm:h-8.5 sm:w-8.5 items-center justify-center rounded-full bg-amber-950 text-white hover:bg-amber-900 border border-amber-950/20 dark:bg-stone-900 dark:text-[#d4a373] dark:hover:bg-amber-950 dark:border-stone-800 transition-all duration-300 cursor-pointer shadow-sm active:scale-95"
               aria-label="Open sidebar"
             >
-              <CiMenuBurger className="w-6 h-6" strokeWidth={1} />
+              <CiMenuBurger className="w-4.5 h-4.5 sm:w-5 sm:h-5" strokeWidth={1} />
             </button>
           </div>
         </div>
