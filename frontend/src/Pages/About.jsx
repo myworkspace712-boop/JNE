@@ -69,7 +69,7 @@ export default function About() {
           {/* Paragraph 1 */}
           <div className="p-5 sm:p-6 rounded-2xl bg-stone-50/90 dark:bg-stone-950/80 border border-stone-200/80 dark:border-stone-800 border-l-4 border-l-amber-900 dark:border-l-[#d4a373]">
             <p className="text-stone-700 dark:text-stone-300 text-base sm:text-lg leading-relaxed text-justify sm:text-left">
-              We are JN Group establish from 1998 in the name of JN Enterprise. It brings us immense pleasure to introduce our self as amongs the top notch in the printing &amp; packaging industry over the decade and a half. We have another sister concern in the name of Yatharth Enterprise. Also we are associate with Sai Print Art and Krishna Graphics to fulfill all your needs from one stop destination.
+              We are JN Group establish from 1998 in the name of JN Enterprise. It brings us immense pleasure to introduce our self as amongs the top notch in the printing &amp; packaging industry over the decade and a half. We have another sister concern in the name of Yatharth Enterprise. Also we are associated with Krishna Graphics and The Pixel Press to fulfill all your needs from one stop destination.
             </p>
           </div>
 

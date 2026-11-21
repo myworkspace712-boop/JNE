@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Hero from '../Components/Hero.jsx';
-import Partners from '../Components/Partners.jsx';
 import Reviews from '../Components/Reviews.jsx';
 
 const Home = () => {
@@ -50,9 +49,6 @@ const Home = () => {
             
             {/* 1. HERO SECTION WITH IMAGE PLACE (NO CAROUSEL, NO GLOWING BORDER) */}
             <Hero />
-
-            {/* PARTNERS & SISTER CONCERN SECTION */}
-            <Partners />
 
             {/* CLIENT REVIEWS & TESTIMONIALS SECTION */}
             <Reviews />
